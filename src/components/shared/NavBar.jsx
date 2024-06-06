@@ -10,6 +10,7 @@ import {
 } from "flowbite-react";
 import Container from "./Container";
 import useAuth from "../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
   const { user, loading: userStatusLoading, logOut } = useAuth();
@@ -17,7 +18,8 @@ const NavBar = () => {
 
   const handleSignOut = async () => {
     await logOut();
-    return navigate("/");
+    toast.success("Sign out successful");
+    return navigate("/signin");
   };
 
   return (
@@ -91,7 +93,7 @@ const NavBar = () => {
                 <Avatar
                   className="w-14 *:*:size-8 *:*:rounded-full *:hover:bg-gray-200 *:dark:hover:bg-gray-700 *:p-2.5 *:rounded-lg object-cover object-center"
                   alt="user-avatar"
-                  img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                  img={user?.photoURL}
                 />
               }
             >

@@ -1,15 +1,23 @@
-import { useState } from "react";
 import PropTypes from "prop-types";
+import { forwardRef, useState } from "react";
 import { FaCircleExclamation, FaEye, FaEyeSlash } from "react-icons/fa6";
 
-const CommonInput = ({ label, inputType, nameId, error = null }) => {
+const CommonInput = forwardRef(function CommonInput(
+  { onChange, onBlur, name, label, inputType, error = null },
+  ref
+) {
   const [type, setType] = useState(inputType);
+
   return (
     <div className="relative">
       <input
         type={type}
-        id={nameId}
-        aria-describedby={nameId + `ErrorHelp`}
+        name={name}
+        id={name}
+        onChange={onChange}
+        onBlur={onBlur}
+        ref={ref}
+        aria-describedby={name + `ErrorHelp`}
         className={`block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer ${
           error
             ? "border-red-600 dark:border-red-500 focus:border-red-600 dark:focus:border-red-500"
@@ -18,16 +26,16 @@ const CommonInput = ({ label, inputType, nameId, error = null }) => {
       />
       {error && (
         <p
-          id={nameId + `ErrorHelp`}
+          id={name + `ErrorHelp`}
           className="mt-2 text-xs text-red-600 dark:text-red-400 flex items-center gap-x-1.5"
         >
           <span className="font-medium">
             <FaCircleExclamation />
           </span>{" "}
-          Some error message.
+          {error}
         </p>
       )}
-      {nameId === "password" && (
+      {name === "password" && (
         <button
           type="button"
           onClick={() => {
@@ -44,7 +52,7 @@ const CommonInput = ({ label, inputType, nameId, error = null }) => {
       )}
 
       <label
-        htmlFor={nameId}
+        htmlFor={name}
         className={`absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto ${
           error
             ? "text-red-600 dark:text-red-500"
@@ -55,12 +63,14 @@ const CommonInput = ({ label, inputType, nameId, error = null }) => {
       </label>
     </div>
   );
-};
+});
 
 CommonInput.propTypes = {
+  onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   inputType: PropTypes.string.isRequired,
-  nameId: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   error: PropTypes.string,
 };
 

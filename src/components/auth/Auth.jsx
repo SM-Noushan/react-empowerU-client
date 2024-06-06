@@ -1,16 +1,54 @@
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
+import { Link, useNavigate } from "react-router-dom";
 
 import FileInput from "../form/FileInput";
 import useAuth from "../../hooks/useAuth";
 import CommonInput from "../form/CommonInput";
 import { FaCircleNotch } from "react-icons/fa6";
+import validateImage from "../../utils/validateImage";
+import generateUniqueFileName from "../../utils/generateUniqueFileName";
+import axios from "axios";
 
 const Auth = ({ role }) => {
-  const { loading, setLoading, createUserWithGoogle } = useAuth();
+  const {
+    loading,
+    setLoading,
+    createUserWithGoogle,
+    createUser,
+    updateProfileInfo,
+  } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
+
+  const handleFormSubmit = async (data) => {
+    try {
+      const imageFile = new FormData();
+      const originalFileName = data.profileImage[0].name;
+      const uniqueFileName = generateUniqueFileName(originalFileName);
+      imageFile.append("image", data.profileImage[0], uniqueFileName);
+      const res = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API}`,
+        imageFile
+      );
+      if (res.data.success) {
+        await createUser(data.email, data.password);
+        toast.success("Sign up successfully.");
+        await updateProfileInfo(data.name, res.data.data.display_url);
+        setLoading(false);
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      return toast.error("Failed! Please try again");
+    }
+  };
 
   const handleSocialSignIn = async () => {
     try {
@@ -22,6 +60,7 @@ const Auth = ({ role }) => {
       toast.error("Error! Try again.");
     }
   };
+
   return (
     <section className="bg-[url('https://i.ibb.co/HVtsYMN/empoweru-auth-light.jpg')] dark:bg-[url('https://i.ibb.co/K5Bx01T/empoweru-auth-dark.jpg')] bg-cover bg-center bg-no-repeat">
       <Helmet>
@@ -43,6 +82,7 @@ const Auth = ({ role }) => {
             </span>
           </Link>
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            {/* google signin/signup */}
             <button
               disabled={loading}
               onClick={handleSocialSignIn}
@@ -65,6 +105,8 @@ const Auth = ({ role }) => {
               Sign {role === "signin" ? "in" : "up"} with Google
               {loading && <FaCircleNotch className="ml-2.5 animate-spin" />}
             </button>
+
+            {/* divider */}
             <div className="flex justify-between items-center gap-x-4">
               <hr className="border-gray-300 border-2 border-dotted flex-1" />
               <span className="text-lg font-medium leading-tight tracking-tight text-gray-900 dark:text-white">
@@ -72,25 +114,85 @@ const Auth = ({ role }) => {
               </span>
               <hr className="border-gray-300 border-2 border-dotted flex-1" />
             </div>
+
+            {/* signin/signup form */}
             {role === "signup" && (
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Create an account
               </h1>
             )}
-            <form className="space-y-4 md:space-y-6" action="#">
-              <CommonInput label="Name" inputType="text" nameId="name" />
+            <form
+              onSubmit={handleSubmit(handleFormSubmit)}
+              className="space-y-4 md:space-y-6"
+            >
+              {/* name */}
+              <CommonInput
+                label="Name"
+                inputType="text"
+                {...register("name", {
+                  required: "Required",
+                  pattern: {
+                    value: /(^[a-zA-Z]{2,20}[a-zA-Z\s]{0,20}[a-zA-Z]{0,20}$)/,
+                    message: "Enter valid name",
+                  },
+                })}
+                error={errors?.name?.message}
+              />
+
+              {/* email */}
               {role === "signup" && (
-                <CommonInput label="Email" inputType="email" nameId="email" />
+                <CommonInput
+                  label="Email"
+                  inputType="email"
+                  {...register("email", {
+                    required: "Required",
+                    pattern: {
+                      value:
+                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                      message: "Enter valid email",
+                    },
+                  })}
+                  error={errors?.email?.message}
+                />
               )}
+
+              {/* password */}
               <CommonInput
                 label="Password"
                 inputType="password"
-                nameId="password"
+                {...register("password", {
+                  required: "Required",
+                  minLength: {
+                    value: 6,
+                    message: "Minimum password length is 6",
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: "Maximum password length is 20",
+                  },
+                  pattern: {
+                    value:
+                      /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/,
+                    message:
+                      "Requires at least one digit, lowercase, uppercase and special character",
+                  },
+                })}
+                error={errors?.password?.message}
               />
+
+              {/* profile picture */}
               {role === "signup" && (
-                <FileInput label="Profile Picture" nameId="profileImage" />
+                <FileInput
+                  label="Profile Picture"
+                  {...register("profileImage", {
+                    required: "Required",
+                    validate: validateImage,
+                  })}
+                  error={errors?.profileImage?.message}
+                />
               )}
 
+              {/* submit button */}
               <button
                 type="submit"
                 disabled={loading}
@@ -99,13 +201,15 @@ const Auth = ({ role }) => {
                 {role === "signin" ? "Sign In" : "Sign Up"}
                 {loading && <FaCircleNotch className="animate-spin" />}
               </button>
+
+              {/* navigate between signin/signup */}
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}
                 <Link
                   to={role === "signin" ? "/signup" : "/signin"}
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
-                  {role === "signin" ? "Sign up here" : "Sign in here"}
+                  {role === "signin" ? "Sign up now" : "Sign in now"}
                 </Link>
               </p>
             </form>
