@@ -1,5 +1,5 @@
 import { FaBars, FaRegCircleUser } from "react-icons/fa6";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   DarkThemeToggle,
   Avatar,
@@ -9,8 +9,17 @@ import {
   MegaMenu,
 } from "flowbite-react";
 import Container from "./Container";
+import useAuth from "../../hooks/useAuth";
 
 const NavBar = () => {
+  const { user, loading: userStatusLoading, logOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await logOut();
+    return navigate("/");
+  };
+
   return (
     <Container>
       <Navbar className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center">
@@ -69,33 +78,46 @@ const NavBar = () => {
             <DarkThemeToggle className="*:size-8 focus:ring-0" />
           </Flowbite>
 
-          <Dropdown
-            className="hover:bg-gray-200 dark:hover:bg-gray-700"
-            arrowIcon={false}
-            inline
-            label={
-              <Avatar
-                className="w-14 *:*:size-8 *:*:rounded-full *:hover:bg-gray-200 *:dark:hover:bg-gray-700 *:p-2.5 *:rounded-lg object-cover object-center"
-                alt="user-avatar"
-                img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-              />
-            }
-          >
-            <Dropdown.Header>
-              <span className="block text-sm">Bonnie Green</span>
-              <span className="block truncate text-sm font-medium">
-                name@flowbite.com
-              </span>
-            </Dropdown.Header>
-            <Dropdown.Item>Dashboard</Dropdown.Item>
-            <Dropdown.Item>Settings</Dropdown.Item>
-            <Dropdown.Item>Earnings</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
-          </Dropdown>
-          {/* <button className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 *:size-8 rounded-lg p-2.5">
-            <FaRegCircleUser />
-          </button> */}
+          {userStatusLoading ? (
+            <div role="status" className="animate-pulse p-2.5">
+              <div className="size-8 bg-gray-300 rounded-full dark:bg-gray-700" />
+            </div>
+          ) : user ? (
+            <Dropdown
+              className="hover:bg-gray-200 dark:hover:bg-gray-700"
+              arrowIcon={false}
+              inline
+              label={
+                <Avatar
+                  className="w-14 *:*:size-8 *:*:rounded-full *:hover:bg-gray-200 *:dark:hover:bg-gray-700 *:p-2.5 *:rounded-lg object-cover object-center"
+                  alt="user-avatar"
+                  img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                />
+              }
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">
+                  {user?.displayName || "Hello,"}
+                </span>
+                <span className="block truncate text-sm font-medium">
+                  {user?.email || ""}
+                </span>
+              </Dropdown.Header>
+              <Dropdown.Item>
+                <Link to="/dashboard">Dashboard</Link>
+              </Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
+            </Dropdown>
+          ) : (
+            <Link
+              to="/signin"
+              className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 *:size-8 rounded-lg p-2.5"
+            >
+              <FaRegCircleUser />
+            </Link>
+          )}
+
           <MegaMenu.DropdownToggle className="inline-flex items-center ml-2.5 p-2.5 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
             <span className="sr-only">Open main menu</span>
             <FaBars className="size-6 md:size-8" />
