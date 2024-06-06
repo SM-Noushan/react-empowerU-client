@@ -19,27 +19,28 @@ const Banner = () => {
   return (
     <Container>
       <div className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center relative">
-        <Swiper
-          direction={"vertical"}
-          autoplay={{ delay: 3000 }}
-          loop={true}
-          pagination={{
-            clickable: true,
-          }}
-          navigation={{
-            nextEl: ".nextSlide",
-            prevEl: ".prevSlide",
-          }}
-          modules={[Pagination, Navigation, Autoplay]}
-          className="w-full rounded-md max-h-[434px] md:max-h-[600px] lg:max-h-[432px] xl:max-h-[496px]"
-        >
-          {bannerInfo?.length > 0 &&
-            bannerInfo.map((data, idx) => (
+        {bannerInfo?.length > 0 && (
+          <Swiper
+            direction={"vertical"}
+            autoplay={{ delay: 3000 }}
+            loop={true}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={{
+              nextEl: ".nextSlide",
+              prevEl: ".prevSlide",
+            }}
+            modules={[Pagination, Navigation, Autoplay]}
+            className="w-full rounded-md max-h-[434px] md:max-h-[600px] lg:max-h-[432px] xl:max-h-[496px]"
+          >
+            {bannerInfo.map((data, idx) => (
               <SwiperSlide key={idx}>
                 <BannerSlide data={data} />
               </SwiperSlide>
             ))}
-        </Swiper>
+          </Swiper>
+        )}
         {/* slide navigate button */}
         <div className="hidden lg:flex flex-col gap-y-2 absolute top-1/2 -translate-y-1/2 lg:-left-12 xl:-left-16 z-10">
           <button
