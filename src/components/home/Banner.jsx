@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, Autoplay, Mousewheel } from "swiper/modules";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 import "swiper/css/effect-creative";
@@ -18,11 +18,10 @@ const Banner = () => {
   }, []);
   return (
     <Container>
-      <div className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center relative py-6">
+      <div className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center relative">
         <Swiper
           direction={"vertical"}
           autoplay={{ delay: 3000 }}
-          mousewheel={true}
           loop={true}
           pagination={{
             clickable: true,
@@ -31,8 +30,8 @@ const Banner = () => {
             nextEl: ".nextSlide",
             prevEl: ".prevSlide",
           }}
-          modules={[Pagination, Navigation, Autoplay, Mousewheel]}
-          className="w-full rounded-md max-h-[450px] md:max-h-[600px] lg:max-h-[448px] xl:max-h-[512px]"
+          modules={[Pagination, Navigation, Autoplay]}
+          className="w-full rounded-md max-h-[434px] md:max-h-[600px] lg:max-h-[432px] xl:max-h-[496px]"
         >
           {bannerInfo?.length > 0 &&
             bannerInfo.map((data, idx) => (

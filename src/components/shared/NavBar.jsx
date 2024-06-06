@@ -1,21 +1,29 @@
-import Container from "./Container";
+import { FaBars, FaRegCircleUser } from "react-icons/fa6";
 import { Link, NavLink } from "react-router-dom";
+import {
+  DarkThemeToggle,
+  Avatar,
+  Dropdown,
+  Navbar,
+  Flowbite,
+  MegaMenu,
+} from "flowbite-react";
+import Container from "./Container";
 
 const NavBar = () => {
   return (
     <Container>
-      <div className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center">
+      <Navbar className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center">
         <Link to="/" className="flex items-center">
           <img
             src="./assets/logo.jpg"
-            className="rounded-md mr-3 h-6 sm:h-9"
+            className="rounded-md mr-3 h-8 sm:h-10"
             alt="empoweru-logo"
           />
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+          <span className="self-center text-xl lg:text-3xl font-semibold whitespace-nowrap dark:text-white">
             EmpowerU
           </span>
         </Link>
-
         {/* search */}
         <form className="hidden lg:block max-w-md mx-auto flex-1">
           <label
@@ -56,93 +64,44 @@ const NavBar = () => {
             </button>
           </div>
         </form>
-
         <div className="flex items-center justify-end">
-          <button
-            id="theme-toggle"
-            type="button"
-            className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg text-sm p-2.5"
-          >
-            <svg
-              id="theme-toggle-dark-icon"
-              className="hidden size-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-            </svg>
-            <svg
-              id="theme-toggle-light-icon"
-              className="hidden size-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                fillRule="evenodd"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </button>
-          <button className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg text-sm p-2.5">
-            <svg
-              className="size-6 text-gray-800 dark:text-white"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+          <Flowbite>
+            <DarkThemeToggle className="*:size-8 focus:ring-0" />
+          </Flowbite>
+
+          <Dropdown
+            className="hover:bg-gray-200 dark:hover:bg-gray-700"
+            arrowIcon={false}
+            inline
+            label={
+              <Avatar
+                className="w-14 *:*:size-8 *:*:rounded-full *:hover:bg-gray-200 *:dark:hover:bg-gray-700 *:p-2.5 *:rounded-lg object-cover object-center"
+                alt="user-avatar"
+                img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
               />
-            </svg>
-          </button>
-          <button
-            data-collapse-toggle="mobile-menu-2"
-            type="button"
-            className="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-            aria-controls="mobile-menu-2"
-            aria-expanded="false"
+            }
           >
+            <Dropdown.Header>
+              <span className="block text-sm">Bonnie Green</span>
+              <span className="block truncate text-sm font-medium">
+                name@flowbite.com
+              </span>
+            </Dropdown.Header>
+            <Dropdown.Item>Dashboard</Dropdown.Item>
+            <Dropdown.Item>Settings</Dropdown.Item>
+            <Dropdown.Item>Earnings</Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item>Sign out</Dropdown.Item>
+          </Dropdown>
+          {/* <button className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 *:size-8 rounded-lg p-2.5">
+            <FaRegCircleUser />
+          </button> */}
+          <MegaMenu.DropdownToggle className="inline-flex items-center ml-2.5 p-2.5 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
             <span className="sr-only">Open main menu</span>
-            <svg
-              className="size-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-            <svg
-              className="hidden size-6"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              ></path>
-            </svg>
-          </button>
+            <FaBars className="size-6 md:size-8" />
+          </MegaMenu.DropdownToggle>
         </div>
-        <div
-          className="hidden justify-between items-center w-full text-right"
-          id="mobile-menu-2"
-        >
+        <MegaMenu.Dropdown className="hidden justify-between items-center w-full text-right">
           <ul className="flex flex-col mt-4 font-medium gap-y-1.5">
             <li>
               <NavLink
@@ -183,8 +142,8 @@ const NavBar = () => {
               </Link>
             </li>
           </ul>
-        </div>
-      </div>
+        </MegaMenu.Dropdown>
+      </Navbar>
     </Container>
   );
 };
