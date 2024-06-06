@@ -1,21 +1,25 @@
+import axios from "axios";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
+import { Spinner } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { FaCircleExclamation, FaCircleNotch } from "react-icons/fa6";
 
 import FileInput from "../form/FileInput";
 import useAuth from "../../hooks/useAuth";
 import CommonInput from "../form/CommonInput";
-import { FaCircleNotch } from "react-icons/fa6";
 import validateImage from "../../utils/validateImage";
 import generateUniqueFileName from "../../utils/generateUniqueFileName";
-import axios from "axios";
 
 const Auth = ({ role }) => {
   const {
+    user,
     loading,
     setLoading,
+    logIn,
     createUserWithGoogle,
     createUser,
     updateProfileInfo,
@@ -24,29 +28,49 @@ const Auth = ({ role }) => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [credentialError, setCredentialError] = useState(null);
+
+  useEffect(() => {
+    reset();
+  }, [location.pathname]);
 
   const handleFormSubmit = async (data) => {
+    const { name, email, profileImage, password } = data;
     try {
-      const imageFile = new FormData();
-      const originalFileName = data.profileImage[0].name;
-      const uniqueFileName = generateUniqueFileName(originalFileName);
-      imageFile.append("image", data.profileImage[0], uniqueFileName);
-      const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API}`,
-        imageFile
-      );
-      if (res.data.success) {
-        await createUser(data.email, data.password);
-        toast.success("Sign up successfully.");
-        await updateProfileInfo(data.name, res.data.data.display_url);
-        setLoading(false);
-        navigate("/");
+      if (role === "signin") {
+        await logIn(email, password);
+        setCredentialError(null);
+        toast.success("Signin successful");
+        navigate(location.state ? location.state : "/");
+      } else {
+        const imageFile = new FormData();
+        const originalFileName = profileImage[0].name;
+        const uniqueFileName = generateUniqueFileName(originalFileName);
+        imageFile.append("image", profileImage[0], uniqueFileName);
+        const res = await axios.post(
+          `https://api.imgbb.com/1/upload?key=${
+            import.meta.env.VITE_IMGBB_API
+          }`,
+          imageFile
+        );
+        if (res.data.success) {
+          await createUser(email, password);
+          toast.success("Sign up successfully.");
+          await updateProfileInfo(name, res.data.data.display_url);
+          setLoading(false);
+          navigate("/");
+        }
       }
     } catch (error) {
       console.log(error);
-      return toast.error("Failed! Please try again");
+      setLoading(false);
+      if (role === "signin") {
+        setCredentialError(true);
+      } else return toast.error("Failed! Please try again");
     }
   };
 
@@ -60,6 +84,15 @@ const Auth = ({ role }) => {
       toast.error("Error! Try again.");
     }
   };
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-dvh">
+        <Spinner aria-label="spinner" size="xl" />
+      </div>
+    );
+
+  if (user) return <Navigate to={location.state ? location.state : "/"} />;
 
   return (
     <section className="bg-[url('https://i.ibb.co/HVtsYMN/empoweru-auth-light.jpg')] dark:bg-[url('https://i.ibb.co/K5Bx01T/empoweru-auth-dark.jpg')] bg-cover bg-center bg-no-repeat">
@@ -126,57 +159,63 @@ const Auth = ({ role }) => {
               className="space-y-4 md:space-y-6"
             >
               {/* name */}
-              <CommonInput
-                label="Name"
-                inputType="text"
-                {...register("name", {
-                  required: "Required",
-                  pattern: {
-                    value: /(^[a-zA-Z]{2,20}[a-zA-Z\s]{0,20}[a-zA-Z]{0,20}$)/,
-                    message: "Enter valid name",
-                  },
-                })}
-                error={errors?.name?.message}
-              />
-
-              {/* email */}
               {role === "signup" && (
                 <CommonInput
-                  label="Email"
-                  inputType="email"
-                  {...register("email", {
+                  label="Name"
+                  inputType="text"
+                  {...register("name", {
                     required: "Required",
                     pattern: {
-                      value:
-                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
-                      message: "Enter valid email",
+                      value: /(^[a-zA-Z]{2,20}[a-zA-Z\s]{0,20}[a-zA-Z]{0,20}$)/,
+                      message: "Enter valid name",
                     },
                   })}
-                  error={errors?.email?.message}
+                  error={errors?.name?.message}
                 />
               )}
+
+              {/* email */}
+              <CommonInput
+                label="Email"
+                inputType="email"
+                {...register("email", {
+                  required: "Required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+                    message: "Enter valid email",
+                  },
+                })}
+                error={errors?.email?.message}
+              />
 
               {/* password */}
               <CommonInput
                 label="Password"
                 inputType="password"
-                {...register("password", {
-                  required: "Required",
-                  minLength: {
-                    value: 6,
-                    message: "Minimum password length is 6",
-                  },
-                  maxLength: {
-                    value: 20,
-                    message: "Maximum password length is 20",
-                  },
-                  pattern: {
-                    value:
-                      /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/,
-                    message:
-                      "Requires at least one digit, lowercase, uppercase and special character",
-                  },
-                })}
+                {...register(
+                  "password",
+                  role === "signup"
+                    ? {
+                        required: "Required",
+                        minLength: {
+                          value: 6,
+                          message: "Minimum password length is 6",
+                        },
+                        maxLength: {
+                          value: 20,
+                          message: "Maximum password length is 20",
+                        },
+                        pattern: {
+                          value:
+                            /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).*$/,
+                          message:
+                            "Requires at least one digit, lowercase, uppercase and special character",
+                        },
+                      }
+                    : {
+                        required: "Required",
+                      }
+                )}
                 error={errors?.password?.message}
               />
 
@@ -201,6 +240,15 @@ const Auth = ({ role }) => {
                 {role === "signin" ? "Sign In" : "Sign Up"}
                 {loading && <FaCircleNotch className="animate-spin" />}
               </button>
+
+              {credentialError && (
+                <p className="mt-2 text-xs text-red-600 dark:text-red-400 flex items-center gap-x-1.5">
+                  <span className="font-medium">
+                    <FaCircleExclamation />
+                  </span>
+                  Invalid Credentials
+                </p>
+              )}
 
               {/* navigate between signin/signup */}
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
