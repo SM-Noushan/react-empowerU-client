@@ -5,13 +5,13 @@ import { Spinner } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { FaCircleExclamation, FaCircleNotch } from "react-icons/fa6";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
-import FileInput from "../form/FileInput";
 import useAuth from "../../hooks/useAuth";
-import CommonInput from "../form/CommonInput";
 import validateImage from "../../utils/validateImage";
+import FileInput from "../../components/form/FileInput";
+import CommonInput from "../../components/form/CommonInput";
 import generateUniqueFileName from "../../utils/generateUniqueFileName";
 
 const Auth = ({ role }) => {

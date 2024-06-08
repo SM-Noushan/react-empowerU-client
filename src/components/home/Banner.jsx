@@ -3,19 +3,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import "swiper/css/effect-creative";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css";
-
 import BannerSlide from "./BannerSlide";
 import Container from "../shared/Container";
+import NavigationButton from "../NavigationButton";
 
 const Banner = () => {
   const [bannerInfo, setBannerInfo] = useState(null);
   useEffect(() => {
     axios.get("/data/banner.json").then((res) => setBannerInfo(res.data));
   }, []);
+
   return (
     <Container>
       <div className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center relative">
@@ -28,8 +25,8 @@ const Banner = () => {
               clickable: true,
             }}
             navigation={{
-              nextEl: ".nextSlide",
-              prevEl: ".prevSlide",
+              nextEl: ".nextSlideBanner",
+              prevEl: ".prevSlideBanner",
             }}
             modules={[Pagination, Navigation, Autoplay]}
             className="w-full rounded-md max-h-[434px] md:max-h-[600px] lg:max-h-[432px] xl:max-h-[496px]"
@@ -42,11 +39,8 @@ const Banner = () => {
           </Swiper>
         )}
         {/* slide navigate button */}
-        <div className="hidden lg:flex flex-col gap-y-2 absolute top-1/2 -translate-y-1/2 lg:-left-12 xl:-left-16 z-10">
-          <button
-            type="button"
-            className="prevSlide text-white bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-primary-800 font-medium rounded-full text-sm p-2.5 text-center me-2 mb-2"
-          >
+        <div className="hidden lg:flex flex-col gap-y-4 absolute top-1/2 -translate-y-1/2 lg:-left-12 xl:-left-16 z-10">
+          <NavigationButton css="prevSlideBanner">
             <svg
               className="w-6 h-6 text-gray-800 dark:text-white"
               aria-hidden="true"
@@ -62,11 +56,8 @@ const Banner = () => {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
-          <button
-            type="button"
-            className="nextSlide text-white bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-primary-800 font-medium rounded-full text-sm p-2.5 text-center me-2 mb-2"
-          >
+          </NavigationButton>
+          <NavigationButton css="nextSlideBanner">
             <svg
               className="w-6 h-6 text-gray-800 dark:text-white"
               aria-hidden="true"
@@ -82,7 +73,7 @@ const Banner = () => {
                 clipRule="evenodd"
               />
             </svg>
-          </button>
+          </NavigationButton>
         </div>
       </div>
     </Container>

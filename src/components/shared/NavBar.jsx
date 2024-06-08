@@ -24,7 +24,7 @@ const NavBar = () => {
 
   return (
     <Container>
-      <Navbar className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center">
+      <Navbar className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center dark:bg-gray-900">
         <Link to="/" className="flex items-center">
           <img
             src="./assets/logo.jpg"

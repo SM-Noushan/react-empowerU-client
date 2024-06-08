@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const BannerSlide = ({ data = {} }) => {
   const { heading, description, image } = data;
   return (
-    <div className="bg-white dark:bg-gray-800 flex flex-col-reverse gap-6 lg:grid lg:gap-8 xl:gap-0 lg:py-12 lg:grid-cols-12">
+    <div className="bg-white dark:bg-gray-900 flex flex-col-reverse gap-6 lg:grid lg:gap-8 xl:gap-0 lg:py-12 lg:grid-cols-12">
       <div className="lg:mr-auto place-self-center lg:col-span-7">
         <h1 className="max-w-2xl mb-4 text-3xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">
           {heading}
