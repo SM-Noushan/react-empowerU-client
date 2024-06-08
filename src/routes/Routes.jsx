@@ -1,8 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
+
 import Main from "../layouts/Main";
 import Home from "../pages/home/Home";
-import Error from "../components/shared/Error";
 import Auth from "../pages/auth/Auth";
+import Error from "../components/shared/Error";
+import AllScholarship from "../pages/all-scholarship/AllScholarship";
 
 export const router = createBrowserRouter([
   {
@@ -13,6 +15,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: "all-scholarship",
+        element: <AllScholarship />,
       },
     ],
   },
