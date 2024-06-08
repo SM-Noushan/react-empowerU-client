@@ -5,8 +5,11 @@ import {
   FaMoneyCheck,
 } from "react-icons/fa6";
 import { Rating } from "flowbite-react";
+import { useNavigate } from "react-router-dom";
 
 const ScholarshipCard = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="mx-auto w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="px-8 pt-8">
@@ -65,7 +68,10 @@ const ScholarshipCard = () => {
           </li>
         </ul>
 
-        <button className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full">
+        <button
+          onClick={() => navigate(`/scholarship/name`)}
+          className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full"
+        >
           View Details
         </button>
       </div>

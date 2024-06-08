@@ -4,7 +4,9 @@ import Main from "../layouts/Main";
 import Home from "../pages/home/Home";
 import Auth from "../pages/auth/Auth";
 import Error from "../components/shared/Error";
+import PrivateRoute from "../routes/PrivateRoute";
 import AllScholarship from "../pages/all-scholarship/AllScholarship";
+import ScholarshipDetails from "../pages/scholarship-details/ScholarshipDetails";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +21,14 @@ export const router = createBrowserRouter([
       {
         path: "all-scholarship",
         element: <AllScholarship />,
+      },
+      {
+        path: "scholarship/:name",
+        element: (
+          <PrivateRoute>
+            <ScholarshipDetails />
+          </PrivateRoute>
+        ),
       },
     ],
   },

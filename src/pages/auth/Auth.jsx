@@ -1,7 +1,6 @@
 import axios from "axios";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
-import { Spinner } from "flowbite-react";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
@@ -11,6 +10,7 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import validateImage from "../../utils/validateImage";
 import FileInput from "../../components/form/FileInput";
+import MySpinner from "../../components/shared/MySpinner";
 import CommonInput from "../../components/form/CommonInput";
 import generateUniqueFileName from "../../utils/generateUniqueFileName";
 
@@ -33,6 +33,8 @@ const Auth = ({ role }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [credentialError, setCredentialError] = useState(null);
+  const redirect =
+    location.state?.from?.pathname + location.state?.from?.search || "/";
 
   useEffect(() => {
     reset();
@@ -45,7 +47,7 @@ const Auth = ({ role }) => {
         await logIn(email, password);
         setCredentialError(null);
         toast.success("Signin successful");
-        navigate(location.state ? location.state : "/");
+        navigate(redirect);
       } else {
         const imageFile = new FormData();
         const originalFileName = profileImage[0].name;
@@ -62,7 +64,7 @@ const Auth = ({ role }) => {
           toast.success("Sign up successfully.");
           await updateProfileInfo(name, res.data.data.display_url);
           setLoading(false);
-          navigate("/");
+          navigate(redirect);
         }
       }
     } catch (error) {
@@ -78,19 +80,14 @@ const Auth = ({ role }) => {
     try {
       await createUserWithGoogle();
       toast.success("Signin successful");
-      navigate(location?.state ? location.state : "/");
+      navigate(redirect);
     } catch (e) {
       setLoading(false);
       toast.error("Error! Try again.");
     }
   };
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-dvh">
-        <Spinner aria-label="spinner" size="xl" />
-      </div>
-    );
+  if (loading) return <MySpinner />;
 
   if (user) return <Navigate to={location.state ? location.state : "/"} />;
 
