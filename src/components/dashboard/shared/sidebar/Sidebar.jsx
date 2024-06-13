@@ -18,8 +18,7 @@ import SidebarItem from "./SidebarItem";
 import logo from "../../../../assets/logo.jpg";
 import useAuth from "../../../../hooks/useAuth";
 import useAdmin from "../../../../hooks/useAdmin.jsx";
-
-const role = "agent";
+import useModerator from "../../../../hooks/useModerator.jsx";
 
 const userSideBarItem = [
   {
@@ -38,7 +37,7 @@ const userSideBarItem = [
     icon: <FaRegStarHalfStroke size={20} />,
   },
 ];
-const agentSideBarItem = [
+const modSideBarItem = [
   {
     link: "/dashboard/profile",
     label: "Profile",
@@ -55,13 +54,26 @@ const agentSideBarItem = [
     icon: <FaRegStarHalfStroke size={20} />,
   },
 ];
+const adminSideBarItem = [
+  {
+    link: "/dashboard/profile",
+    label: "Profile",
+    icon: <FaClipboardUser size={20} />,
+  },
+];
+
+const sidebarSkeleton = (
+  <aside className="h-dvh w-72 animate-pulse">
+    <div className="h-full bg-gray-400" />
+  </aside>
+);
 
 const tooltipCSS =
   "absolute z-50 left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0";
 
 const Sidebar = () => {
-  const { isAdmin } = useAdmin();
-  console.log(isAdmin);
+  const { isAdmin, isAdminLoading } = useAdmin();
+  const { isMod, isModLoading } = useModerator();
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
 
@@ -74,6 +86,8 @@ const Sidebar = () => {
     toast.success("Sign out successful");
     return navigate("/signin");
   };
+
+  if (isAdminLoading || isModLoading) return sidebarSkeleton;
 
   return (
     <>
@@ -113,12 +127,17 @@ const Sidebar = () => {
           </div>
           {/* sidebar menu item */}
           <menu className="mt-6 flex-1 px-3">
-            {/* {userSideBarItem.map((item, idx) => (
-              <SidebarItem key={idx} details={item} expanded={expanded} />
-            ))} */}
-            {agentSideBarItem.map((item, idx) => (
-              <SidebarItem key={idx} details={item} expanded={expanded} />
-            ))}
+            {isAdmin?.role
+              ? adminSideBarItem.map((item, idx) => (
+                  <SidebarItem key={idx} details={item} expanded={expanded} />
+                ))
+              : isMod?.role
+              ? modSideBarItem.map((item, idx) => (
+                  <SidebarItem key={idx} details={item} expanded={expanded} />
+                ))
+              : userSideBarItem.map((item, idx) => (
+                  <SidebarItem key={idx} details={item} expanded={expanded} />
+                ))}
           </menu>
           {/* dark mode */}
           <div className="border-t dark:border-t-gray-950 flex items-center justify-center px-3 py-3.5 my-1 font-medium rounded-md relative group leading-4 dark:text-white">

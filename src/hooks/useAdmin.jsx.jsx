@@ -5,7 +5,7 @@ const useAdmin = () => {
   const { user } = useAuth();
   const { data: isAdmin, isLoading: isAdminLoading } = useFetchData(
     "isAdmin",
-    `admin/verify/${user?.uid}`,
+    `role/verify/${user?.uid}?role=admin`,
     {},
     true
   );
