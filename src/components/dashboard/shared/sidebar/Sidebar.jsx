@@ -17,6 +17,7 @@ import { DarkThemeToggle, Flowbite } from "flowbite-react";
 import SidebarItem from "./SidebarItem";
 import logo from "../../../../assets/logo.jpg";
 import useAuth from "../../../../hooks/useAuth";
+import useAdmin from "../../../../hooks/useAdmin.jsx";
 
 const role = "agent";
 
@@ -59,6 +60,8 @@ const tooltipCSS =
   "absolute z-50 left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0";
 
 const Sidebar = () => {
+  const { isAdmin } = useAdmin();
+  console.log(isAdmin);
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
 
