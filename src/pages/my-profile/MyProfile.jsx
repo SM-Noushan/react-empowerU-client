@@ -54,16 +54,17 @@ const MyProfile = () => {
     }
   };
   return (
-    <section className="flex flex-col md:flex-row justify-center items-center gap-12 lg:gap-x-12 h-full">
+    <section className="flex flex-col xl:flex-row justify-center items-center lg:gap-x-12 h-full my-4 lg:my-16 xl:my-0">
       <Helmet>
         <title>EmpowerU: My Profile</title>
       </Helmet>
 
       {/* profile info */}
-      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 pt-4">
-        <div className="flex flex-col items-center pb-10">
+      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 my-8">
+        {/* mt-8 pt-4 */}
+        <div className="flex flex-col items-center py-10">
           <img
-            className="mb-3 rounded-full size-72 shadow-lg object-cover object-center"
+            className="mb-3 rounded-full size-52 lg:size-72 shadow-lg object-cover object-center"
             src={user?.photoURL}
             alt="profile-image"
           />
@@ -99,7 +100,7 @@ const MyProfile = () => {
         {/* edit form */}
         <form
           onSubmit={handleSubmit(handleOnSubmit)}
-          className="mx-auto w-[24rem] text-left pt-6 space-y-6"
+          className="mx-auto max-w-[24rem] text-left pt-6 space-y-6"
         >
           {/* name */}
           <CommonInput
@@ -132,7 +133,7 @@ const MyProfile = () => {
             })}
             error={errors?.profileImage?.message}
           />
-          
+
           {/* update button */}
           <div className="form-control mt-6">
             <SubmitButton

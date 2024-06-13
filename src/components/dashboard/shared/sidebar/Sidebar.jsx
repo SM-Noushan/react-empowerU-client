@@ -18,7 +18,26 @@ import SidebarItem from "./SidebarItem";
 import logo from "../../../../assets/logo.jpg";
 import useAuth from "../../../../hooks/useAuth";
 
+const role = "agent";
+
 const userSideBarItem = [
+  {
+    link: "/dashboard/profile",
+    label: "Profile",
+    icon: <FaClipboardUser size={20} />,
+  },
+  {
+    link: "/dashboard/applications",
+    label: "Applications",
+    icon: <FaRegPenToSquare size={20} />,
+  },
+  {
+    link: "/dashboard/reviews",
+    label: "Reviews",
+    icon: <FaRegStarHalfStroke size={20} />,
+  },
+];
+const agentSideBarItem = [
   {
     link: "/dashboard/profile",
     label: "Profile",
@@ -55,8 +74,8 @@ const Sidebar = () => {
 
   return (
     <>
-      <aside className="w-fit max-w-72">
-        <nav className="h-dvh flex flex-col bg-white dark:bg-gray-900 border-r dark:border-r-gray-950 shadow-sm">
+      <aside className="h-dvh w-fit max-w-72">
+        <nav className="h-full flex flex-col bg-white dark:bg-gray-900 border-r dark:border-r-gray-950 shadow-sm">
           {/* website logo */}
           <div className="p-4 pb-2 flex justify-between items-center">
             <Link
@@ -91,7 +110,10 @@ const Sidebar = () => {
           </div>
           {/* sidebar menu item */}
           <menu className="mt-6 flex-1 px-3">
-            {userSideBarItem.map((item, idx) => (
+            {/* {userSideBarItem.map((item, idx) => (
+              <SidebarItem key={idx} details={item} expanded={expanded} />
+            ))} */}
+            {agentSideBarItem.map((item, idx) => (
               <SidebarItem key={idx} details={item} expanded={expanded} />
             ))}
           </menu>
