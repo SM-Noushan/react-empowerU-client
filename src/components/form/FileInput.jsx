@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { FaCircleExclamation } from "react-icons/fa6";
 
 const FileInput = forwardRef(function FileInput(
-  { onChange, onBlur, name, label, error = null },
+  { onChange, onBlur, name, label, error = null, disable = false },
   ref
 ) {
   return (
@@ -25,6 +25,7 @@ const FileInput = forwardRef(function FileInput(
         onChange={onChange}
         onBlur={onBlur}
         ref={ref}
+        disabled={disable}
         aria-describedby={name + `ErrorHelp`}
         className={`block rounded-lg px-2.5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 dark:text-white  focus:outline-none focus:ring-0 peer ${
           error
@@ -53,6 +54,7 @@ FileInput.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   error: PropTypes.string,
+  disable: PropTypes.bool,
 };
 
 export default FileInput;

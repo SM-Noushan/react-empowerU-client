@@ -13,6 +13,7 @@ import FileInput from "../../components/form/FileInput";
 import MySpinner from "../../components/shared/MySpinner";
 import CommonInput from "../../components/form/CommonInput";
 import generateUniqueFileName from "../../utils/generateUniqueFileName";
+import SubmitButton from "../../components/form/SubmitButton";
 
 const Auth = ({ role }) => {
   const {
@@ -229,14 +230,10 @@ const Auth = ({ role }) => {
               )}
 
               {/* submit button */}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 disabled:bg-primary-600 dark:disabled:bg-primary-600 flex items-center justify-center gap-x-2"
-              >
-                {role === "signin" ? "Sign In" : "Sign Up"}
-                {loading && <FaCircleNotch className="animate-spin" />}
-              </button>
+              <SubmitButton
+                label={role === "signin" ? "Sign In" : "Sign Up"}
+                dependencies={{ loading }}
+              />
 
               {credentialError && (
                 <p className="mt-2 text-xs text-red-600 dark:text-red-400 flex items-center gap-x-1.5">

@@ -1,20 +1,22 @@
 import {
+  PiArrowLineLeftDuotone,
+  PiArrowLineRightDuotone,
+} from "react-icons/pi";
+import {
   FaArrowRightToBracket,
   FaClipboardUser,
   FaRegPenToSquare,
   FaRegStarHalfStroke,
   FaUser,
 } from "react-icons/fa6";
-import {
-  PiArrowLineLeftDuotone,
-  PiArrowLineRightDuotone,
-} from "react-icons/pi";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
+import { DarkThemeToggle, Flowbite } from "flowbite-react";
 
 import SidebarItem from "./SidebarItem";
 import logo from "../../../../assets/logo.jpg";
-import { DarkThemeToggle, Flowbite } from "flowbite-react";
+import useAuth from "../../../../hooks/useAuth";
 
 const userSideBarItem = [
   {
@@ -38,9 +40,18 @@ const tooltipCSS =
   "absolute z-50 left-full rounded-md px-2 py-1 ml-6 bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0";
 
 const Sidebar = () => {
+  const { user, logOut } = useAuth();
+  const navigate = useNavigate();
+
   const [expanded, setExpanded] = useState(
     window.innerWidth > 768 ? true : false
   );
+
+  const handleSignOut = async () => {
+    await logOut();
+    toast.success("Sign out successful");
+    return navigate("/signin");
+  };
 
   return (
     <>
@@ -95,17 +106,20 @@ const Sidebar = () => {
               >
                 <span className="inline-block w-24">Dark Mode</span>
               </div>
-              {!expanded && <div className={`${tooltipCSS} w-[90px]`}>Dark Mode</div>}
+              {!expanded && (
+                <div className={`${tooltipCSS} w-[90px]`}>Dark Mode</div>
+              )}
             </Flowbite>
           </div>
           {/* user info */}
           <div className="border-t dark:border-t-gray-950 flex items-center justify-center p-3 leading-4 dark:text-white relative group">
-            {expanded ? (
-              <FaUser size={20} className="rounded-md" />
+            {user?.photoURL ? (
+              <img
+                src={user.photoURL}
+                className="size-10 rounded-full object-cover object-center"
+              />
             ) : (
-              <button>
-                <FaUser size={20} className="rounded-md" />
-              </button>
+              <FaUser size={20} className="rounded-md" />
             )}
             <div
               className={`flex justify-between items-center overflow-hidden transition-all duration-500 ${
@@ -113,20 +127,21 @@ const Sidebar = () => {
               }`}
             >
               <div>
-                <h4 className="font-semibold">User Name</h4>
+                <h4 className="font-semibold">
+                  {user?.displayName || "Anonymous"}
+                </h4>
                 <span className="text-sm text-gray-600 dark:text-white/80">
-                  email@example.com
+                  {user?.email}
                 </span>
               </div>
-              <button className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-transparent dark:hover:bg-gray-950">
+              <button
+                onClick={handleSignOut}
+                title="Sign Out"
+                className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100 dark:bg-transparent dark:hover:bg-gray-950"
+              >
                 <FaArrowRightToBracket />
               </button>
             </div>
-            {!expanded && (
-              <div className={`${tooltipCSS} font-medium w-[74px]`}>
-                Sign Out
-              </div>
-            )}
           </div>
         </nav>
       </aside>

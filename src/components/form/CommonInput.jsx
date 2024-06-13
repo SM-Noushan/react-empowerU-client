@@ -3,7 +3,7 @@ import { forwardRef, useState } from "react";
 import { FaCircleExclamation, FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const CommonInput = forwardRef(function CommonInput(
-  { onChange, onBlur, name, label, inputType, error = null },
+  { onChange, onBlur, name, label, inputType, error = null, disable = false },
   ref
 ) {
   const [type, setType] = useState(inputType);
@@ -17,6 +17,7 @@ const CommonInput = forwardRef(function CommonInput(
         onChange={onChange}
         onBlur={onBlur}
         ref={ref}
+        disabled={disable}
         aria-describedby={name + `ErrorHelp`}
         className={`block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer ${
           error
@@ -72,6 +73,7 @@ CommonInput.propTypes = {
   inputType: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   error: PropTypes.string,
+  disable: PropTypes.bool,
 };
 
 export default CommonInput;

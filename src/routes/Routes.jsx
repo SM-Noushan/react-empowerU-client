@@ -37,7 +37,16 @@ export const router = createBrowserRouter([
   {
     path: "dashboard",
     element: <Dashboard />,
-    children: [{ path: "profile", element: <MyProfile /> }],
+    children: [
+      {
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <MyProfile />
+          </PrivateRoute>
+        ),
+      },
+    ],
   },
   {
     path: "/signin",
