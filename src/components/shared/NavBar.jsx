@@ -11,6 +11,7 @@ import {
 import Container from "./Container";
 import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
+import logo from "../../assets/logo.jpg";
 
 const NavBar = () => {
   const { user, loading: userStatusLoading, logOut } = useAuth();
@@ -27,7 +28,7 @@ const NavBar = () => {
       <Navbar className="max-w-screen-2xl mx-auto flex flex-wrap justify-between items-center dark:bg-gray-900">
         <Link to="/" className="flex items-center">
           <img
-            src="./assets/logo.jpg"
+            src={logo}
             className="rounded-md mr-3 h-8 sm:h-10"
             alt="empoweru-logo"
           />
@@ -106,7 +107,7 @@ const NavBar = () => {
                 </span>
               </Dropdown.Header>
               <Dropdown.Item>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/dashboard/profile">My Profile</Link>
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleSignOut}>Sign out</Dropdown.Item>
@@ -145,7 +146,7 @@ const NavBar = () => {
             </li>
             <li>
               <NavLink
-                to="/dashboard"
+                to="/dashboard/profile"
                 className="block pr-1.5 rounded bg-transparent text-primary-700 lg:p-0 dark:text-white"
               >
                 Dashboard

@@ -7,6 +7,8 @@ import Error from "../components/shared/Error";
 import PrivateRoute from "../routes/PrivateRoute";
 import AllScholarship from "../pages/all-scholarship/AllScholarship";
 import ScholarshipDetails from "../pages/scholarship-details/ScholarshipDetails";
+import Dashboard from "../layouts/Dashboard";
+import MyProfile from "../pages/my-profile/MyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +33,11 @@ export const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "dashboard",
+    element: <Dashboard />,
+    children: [{ path: "profile", element: <MyProfile /> }],
   },
   {
     path: "/signin",

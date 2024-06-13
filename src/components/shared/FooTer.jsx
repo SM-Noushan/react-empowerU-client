@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import logo from "../../assets/logo.jpg";
+
 const FooTer = () => {
   return (
     <footer className="p-4 bg-white md:p-8 lg:p-10 dark:bg-gray-900">
@@ -9,7 +11,7 @@ const FooTer = () => {
           className="flex justify-center items-center text-2xl font-semibold text-gray-900 dark:text-white"
         >
           <img
-            src="./assets/logo.jpg"
+            src={logo}
             className="rounded-md mr-3 h-6 sm:h-9"
             alt="empoweru-logo"
           />
