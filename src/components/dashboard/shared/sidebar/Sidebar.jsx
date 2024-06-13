@@ -3,11 +3,15 @@ import {
   PiArrowLineRightDuotone,
 } from "react-icons/pi";
 import {
-  FaArrowRightToBracket,
+  FaUser,
+  FaUsers,
+  FaUserGraduate,
   FaClipboardUser,
+  FaGraduationCap,
+  FaBookOpenReader,
   FaRegPenToSquare,
   FaRegStarHalfStroke,
-  FaUser,
+  FaArrowRightToBracket,
 } from "react-icons/fa6";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -59,6 +63,31 @@ const adminSideBarItem = [
     link: "/dashboard/profile",
     label: "Profile",
     icon: <FaClipboardUser size={20} />,
+  },
+  {
+    link: "/dashboard/scholarship/add",
+    label: "Scholarship",
+    icon: <FaGraduationCap size={20} />,
+  },
+  {
+    link: "/dashboard/scholarships",
+    label: "Manage",
+    icon: <FaUserGraduate size={20} />,
+  },
+  {
+    link: "/dashboard/applications",
+    label: "Applications",
+    icon: <FaBookOpenReader size={20} />,
+  },
+  {
+    link: "/dashboard/users",
+    label: "Users",
+    icon: <FaUsers size={20} />,
+  },
+  {
+    link: "/dashboard/reviews",
+    label: "Reviews",
+    icon: <FaRegStarHalfStroke size={20} />,
   },
 ];
 

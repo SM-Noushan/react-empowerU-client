@@ -27,7 +27,7 @@ const FileInput = forwardRef(function FileInput(
         ref={ref}
         disabled={disable}
         aria-describedby={name + `ErrorHelp`}
-        className={`block rounded-lg px-2.5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 dark:text-white  focus:outline-none focus:ring-0 peer ${
+        className={`block rounded-t-lg px-2.5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 dark:text-white  focus:outline-none focus:ring-0 peer ${
           error
             ? "border-red-600 dark:border-red-500 focus:border-red-600 dark:focus:border-red-500"
             : "border-gray-300 dark:border-gray-600 dark:focus:border-primary-500 focus:border-primary-600"

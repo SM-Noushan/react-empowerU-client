@@ -7,7 +7,7 @@ const Dashboard = () => {
       <div className="fixed bg-black lg:static z-50">
         <Sidebar />
       </div>
-      <div className="flex-1 pl-24 pr-6 lg:px-16 xl:px-20 text-gray-950 dark:text-white overflow-y-scroll">
+      <div className="flex-1 pl-24 pr-6 lg:px-16 xl:px-20 text-gray-950 dark:text-white overflow-y-scroll *:h-full">
         <Outlet />
       </div>
     </div>
