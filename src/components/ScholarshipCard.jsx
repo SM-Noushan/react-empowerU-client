@@ -6,52 +6,63 @@ import {
 } from "react-icons/fa6";
 import { Rating } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const ScholarshipCard = () => {
+const ScholarshipCard = ({ data }) => {
+  const {
+    scholarshipCategory,
+    scholarshipName,
+    universityLogo,
+    universityName,
+    universityCity,
+    universityCountry,
+    applicationDeadline,
+    subjectCategory,
+    applicationFee,
+  } = data; //todo rating
   const navigate = useNavigate();
 
   return (
     <div className="mx-auto w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <div className="px-8 pt-8">
         <img
-          className="rounded-t-lg mb-2.5"
-          src="https://th.bing.com/th/id/R.60e53391a03b165c9b7aee0a73817696?rik=q7CyGyhp%2b7znEw&pid=ImgRaw&r=0"
-          alt="product image"
+          className="rounded-t-lg mb-2.5 w-full h-52 object-contain"
+          src={universityLogo}
+          alt="university-logo"
         />
         <div className="text-sm lg:text-base font-medium tracking-tight text-white dark:text-gray-950 space-x-2.5">
           <span className="inline-block bg-gray-700 dark:bg-gray-200 px-2.5 rounded-sm">
-            Category 1
-          </span>
-          <span className="inline-block bg-gray-700 dark:bg-gray-200 px-2.5 rounded-sm">
-            Category 2
+            {scholarshipCategory}
           </span>
         </div>
       </div>
       <div className="px-5 py-5 text-gray-900 dark:text-white">
         <h5 className="text-xl lg:text-3xl font-semibold tracking-tight">
-          University Name
+          {universityName}
         </h5>
 
         <ul role="list" className="my-2.5 space-y-4 text-left pl-2">
           <li className="flex items-center space-x-3">
             {/* <!-- Icon --> */}
             <FaMapLocationDot />
-            <span>Location: Kuril, 20</span>
+            <span>
+              Location: {universityCity}, {universityCountry}
+            </span>
           </li>
           <li className="flex items-center space-x-3">
             {/* <!-- Icon --> */}
             <FaCalendarCheck />
-            <span>Deadline: 20 March, 2020</span>
+            <span>Deadline: {applicationDeadline}</span>
           </li>
           <li className="flex items-center space-x-3">
             {/* <!-- Icon --> */}
             <FaMoneyCheck />
-            <span>Fess: 1200$</span>
+            <span>Fess: {applicationFee}$</span>
           </li>
           <li className="flex items-center space-x-3">
             {/* <!-- Icon --> */}
             <FaBook />
-            <span>Subject: Science</span>
+            <span>Subject: {subjectCategory}</span>
           </li>
           <li className="flex items-center space-x-3">
             {/* <!-- Icon --> */}
@@ -77,6 +88,10 @@ const ScholarshipCard = () => {
       </div>
     </div>
   );
+};
+
+ScholarshipCard.propTypes = {
+  data: PropTypes.object.isRequired,
 };
 
 export default ScholarshipCard;

@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-// import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 import useAuth from "../../hooks/useAuth";
 import usePostData from "../../hooks/usePostData";
@@ -13,7 +13,7 @@ import parseScholarshipDetailsData from "../../utils/parseScholarshipDetailsData
 import ScholarshipDetailsInputFields from "../../components/dashboard/ScholarshipDetailsInputFields";
 
 const AddScholarship = () => {
-  //   const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const {
@@ -29,11 +29,11 @@ const AddScholarship = () => {
     setValue("applicationDeadline", new Date());
   }, []);
 
-  //   const onSuccess = () => {
-  //     queryClient.invalidateQueries(["scholarships, topScholarships"]);
-  //   };
+  const onSuccess = () => {
+    queryClient.invalidateQueries(["scholarships"]);
+  };
 
-  const { mutateAsync: addScholarshipMutation } = usePostData();
+  const { mutateAsync: addScholarshipMutation } = usePostData(onSuccess);
 
   const handleFormSubmit = async (data) => {
     setLoading(true);
