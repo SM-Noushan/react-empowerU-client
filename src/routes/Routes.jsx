@@ -26,12 +26,14 @@ export const router = createBrowserRouter([
         element: <AllScholarship />,
       },
       {
-        path: "scholarship/:name",
+        path: "scholarship/:id",
         element: (
           <PrivateRoute>
             <ScholarshipDetails />
           </PrivateRoute>
         ),
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/scholarship/${params.id}`),
       },
     ],
   },

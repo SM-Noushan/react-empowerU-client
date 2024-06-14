@@ -7,6 +7,7 @@ import moment from "moment";
 import SelectInput from "../form/SelectInput";
 import validateImage from "../../utils/validateImage";
 import FileInput from "../form/FileInput";
+import TextAreaInput from "../form/TextAreaInput";
 
 const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
   return (
@@ -33,8 +34,8 @@ const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
 
       <div className="flex items-center gap-4 *:flex-1">
         {/* university country */}
-         {/* university city */}
-         <CommonInput
+        {/* university city */}
+        <CommonInput
           label="City"
           inputType="text"
           {...register("universityCity", {
@@ -52,7 +53,7 @@ const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
           error={errors?.universityCountry?.message}
         />
       </div>
-      
+
       {/* university rank */}
       <CommonInput
         label="World Rank"
@@ -192,6 +193,19 @@ const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
           />
         </DatePicker>
       </div>
+
+      {/* scholarship descriptions */}
+      <TextAreaInput
+        label="Scholarship Description"
+        {...register("scholarshipDescription", {
+          required: "Required",
+          minLength: {
+            value: 250,
+            message: "Must be at least 250 characters long",
+          },
+        })}
+        error={errors?.scholarshipDescription?.message}
+      />
     </>
   );
 };

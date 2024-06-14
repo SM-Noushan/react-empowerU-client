@@ -10,6 +10,7 @@ import PropTypes from "prop-types";
 
 const ScholarshipCard = ({ data }) => {
   const {
+    _id,
     scholarshipCategory,
     scholarshipName,
     universityLogo,
@@ -37,8 +38,11 @@ const ScholarshipCard = ({ data }) => {
         </div>
       </div>
       <div className="px-5 py-5 text-gray-900 dark:text-white">
-        <h5 className="text-xl lg:text-3xl font-semibold tracking-tight">
-          {universityName}
+        <h5 className="text-2xl font-semibold tracking-tight">
+          {scholarshipName} <br />
+          <span className="text-sm lg:text-base font-medium">
+            By {universityName}
+          </span>
         </h5>
 
         <ul role="list" className="my-2.5 space-y-4 text-left pl-2">
@@ -80,7 +84,7 @@ const ScholarshipCard = ({ data }) => {
         </ul>
 
         <button
-          onClick={() => navigate(`/scholarship/name`)}
+          onClick={() => navigate(`/scholarship/${_id}`)}
           className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 w-full"
         >
           View Details

@@ -10,7 +10,7 @@ const Home = () => {
         <title>EmpowerU: Home</title>
       </Helmet>
       <Banner />
-      <TopScholarships />
+      {/* <TopScholarships /> */}
     </>
   );
 };
