@@ -18,6 +18,7 @@ const CommonInput = forwardRef(function CommonInput(
         onBlur={onBlur}
         ref={ref}
         disabled={disable}
+        step={name === "universityWorldRank" ? 1 : 0.01}
         aria-describedby={name + `ErrorHelp`}
         className={`block rounded-t-lg px-2.5 pb-2.5 pt-5 w-full text-sm text-gray-900 bg-gray-50 dark:bg-gray-700 border-0 border-b-2 appearance-none dark:text-white  focus:outline-none focus:ring-0 peer ${
           error
