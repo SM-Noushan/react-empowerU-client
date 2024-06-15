@@ -1,5 +1,4 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import PropTypes from "prop-types";
@@ -14,7 +13,6 @@ const CheckOutForm = ({ price, id, setOpenModal, setPayStatus }) => {
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
   const [clientSecret, setClientSecret] = useState("");
-  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (price)
@@ -80,7 +78,6 @@ const CheckOutForm = ({ price, id, setOpenModal, setPayStatus }) => {
         if (resPayDB?.data?.insertedId) {
           setPayStatus(true);
           setOpenModal(true);
-          queryClient.invalidateQueries(["myPayments"]);
           return toast.success("Payment Successful");
         }
       }

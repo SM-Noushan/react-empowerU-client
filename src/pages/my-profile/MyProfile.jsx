@@ -4,13 +4,14 @@ import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 
 import useAuth from "../../hooks/useAuth";
+import useAdmin from "../../hooks/useAdmin.jsx";
 import uploadImage from "../../utils/uploadImage";
+import useModerator from "../../hooks/useModerator";
 import validateImage from "../../utils/validateImage";
 import FileInput from "../../components/form/FileInput";
 import CommonInput from "../../components/form/CommonInput";
 import SubmitButton from "../../components/form/SubmitButton";
-import useModerator from "../../hooks/useModerator";
-import useAdmin from "../../hooks/useAdmin.jsx";
+import DashboardContainer from "../../components/dashboard/shared/DashboardContainer.jsx";
 
 const MyProfile = () => {
   const { isAdmin, isAdminLoading } = useAdmin();
@@ -58,7 +59,7 @@ const MyProfile = () => {
     }
   };
   return (
-    <section className="flex flex-col xl:flex-row justify-center items-center lg:gap-x-12  my-4 lg:my-16 xl:my-0">
+    <DashboardContainer>
       <Helmet>
         <title>EmpowerU: My Profile</title>
       </Helmet>
@@ -83,7 +84,11 @@ const MyProfile = () => {
             ""
           ) : (
             <div className="mt-4 md:mt-6 inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-primary-700 rounded-lg dark:bg-primary-600">
-              {isAdmin.role ? "Role: Admin" : isMod ? "Role: Moderator" : "Hi"}
+              {isAdmin.role
+                ? "Role: Admin"
+                : isMod.role
+                ? "Role: Moderator"
+                : "Hi"}
             </div>
           )}
         </div>
@@ -151,7 +156,7 @@ const MyProfile = () => {
           </div>
         </form>
       </div>
-    </section>
+    </DashboardContainer>
   );
 };
 

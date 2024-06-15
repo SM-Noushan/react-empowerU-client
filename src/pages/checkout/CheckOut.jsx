@@ -1,4 +1,5 @@
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -24,13 +25,14 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
 const CheckOut = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { state } = useLocation();
   const data = state?.data || {};
+  const queryClient = useQueryClient();
   const [payStatus, setPayStatus] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const formRef = useRef();
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -83,7 +85,7 @@ const CheckOut = () => {
         // console.log(newData);
         const object = {
           method: "post",
-          url: "applied-scholarships",
+          url: "appliedScholarships",
           data: newData,
         };
         const resDB = await applyScholarshipMutation(object);
@@ -93,8 +95,9 @@ const CheckOut = () => {
           setOpenModal(false);
           setPayStatus(false);
           reset();
+          queryClient.invalidateQueries(["myApplications"]);
           toast.success("Successfully Applied");
-          return navigate("/");
+          return navigate("/dashboard/applications");
         }
       }
     } catch (error) {

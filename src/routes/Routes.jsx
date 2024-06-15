@@ -8,6 +8,7 @@ import Error from "../components/shared/Error";
 import PrivateRoute from "../routes/PrivateRoute";
 import CheckOut from "../pages/checkout/CheckOut";
 import MyProfile from "../pages/my-profile/MyProfile";
+import MyApplications from "../pages/applications/MyApplications";
 import AllScholarship from "../pages/all-scholarship/AllScholarship";
 import AddScholarship from "../pages/add-scholarships/AddScholarship";
 import ScholarshipDetails from "../pages/scholarship-details/ScholarshipDetails";
@@ -54,6 +55,7 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      // user
       {
         path: "profile",
         element: (
@@ -62,6 +64,16 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: "applications",
+        element: (
+          <PrivateRoute>
+            <MyApplications />
+          </PrivateRoute>
+        ),
+      },
+      
+      // admin or mod
       {
         path: "scholarship/add",
         element: (
