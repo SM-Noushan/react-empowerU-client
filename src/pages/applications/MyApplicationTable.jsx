@@ -9,19 +9,46 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Dropdown, Table } from "flowbite-react";
 
-import ApplicationFormModal from "../../components/ApplicationFormModal";
 import { toast } from "react-toastify";
+import useAuth from "../../hooks/useAuth";
+import usePostData from "../../hooks/usePostData";
+import { useQueryClient } from "@tanstack/react-query";
+import ApplicationFormModal from "../../components/ApplicationFormModal";
+import PopUpModal from "../../components/PopUpModal";
 
 const MyApplicationTable = ({ data }) => {
+  const { user } = useAuth();
+  const [cancelApplication, setCancelApplication] = useState(null);
   const [modalData, setModalData] = useState({});
   const [openModal, setOpenModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: cancelScholarshipMutation } = usePostData();
+
   const handleEdit = (d) => {
-    // const status = "ProceSSinG";
     setModalData(d);
-    // console.log(d);
-    if (status?.toLowerCase() === "pending" || !status) {
+    if (d.status?.toLowerCase() === "pending" || !d.status) {
       return setOpenModal(true);
     } else return toast.warn("Application is in process!");
+  };
+
+  const handleCancel = async (id) => {
+    try {
+      const object = {
+        method: "delete",
+        url: `appliedScholarships/${id}?uid=${user.uid}`,
+      };
+      const resDB = await cancelScholarshipMutation(object);
+      if (resDB.data?.modifiedCount) {
+        setDeleteModal(false);
+        queryClient.invalidateQueries(["myApplications"]);
+        return toast.success("Application cancelled");
+      }
+    } catch (error) {
+      console.log(error);
+      return toast.error("Failed! Try again");
+    }
   };
   return (
     <>
@@ -89,7 +116,14 @@ const MyApplicationTable = ({ data }) => {
                   >
                     Edit
                   </Dropdown.Item>
-                  <Dropdown.Item icon={FaRegRectangleXmark}>
+                  <Dropdown.Item
+                    className="text-red-400 dark:text-red-600"
+                    icon={FaRegRectangleXmark}
+                    onClick={() => {
+                      setCancelApplication(d._id);
+                      setDeleteModal(true);
+                    }}
+                  >
                     Cancel
                   </Dropdown.Item>
                 </Dropdown>
@@ -106,6 +140,11 @@ const MyApplicationTable = ({ data }) => {
           ))}
         </Table.Body>
       </Table>
+      <PopUpModal
+        modalState={deleteModal}
+        toggleModal={setDeleteModal}
+        onClick={() => handleCancel(cancelApplication)}
+      />
       <ApplicationFormModal
         openModal={openModal}
         setOpenModal={setOpenModal}

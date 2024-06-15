@@ -69,6 +69,7 @@ const ApplicationFormModal = ({
   const onCloseModal = () => {
     setOpenModal(false);
   };
+  
   const handleFormSubmit = async (data) => {
     setLoading(true);
     if (edit) {
