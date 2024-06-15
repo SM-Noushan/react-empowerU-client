@@ -1,4 +1,3 @@
-import axios from "axios";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -8,11 +7,11 @@ import { FaCircleExclamation, FaCircleNotch } from "react-icons/fa6";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import useAuth from "../../hooks/useAuth";
+import uploadImage from "../../utils/uploadImage";
 import validateImage from "../../utils/validateImage";
 import FileInput from "../../components/form/FileInput";
 import MySpinner from "../../components/shared/MySpinner";
 import CommonInput from "../../components/form/CommonInput";
-import generateUniqueFileName from "../../utils/generateUniqueFileName";
 import SubmitButton from "../../components/form/SubmitButton";
 
 const Auth = ({ role }) => {
@@ -50,16 +49,7 @@ const Auth = ({ role }) => {
         toast.success("Signin successful");
         navigate(redirect);
       } else {
-        const imageFile = new FormData();
-        const originalFileName = profileImage[0].name;
-        const uniqueFileName = generateUniqueFileName(originalFileName);
-        imageFile.append("image", profileImage[0], uniqueFileName);
-        const res = await axios.post(
-          `https://api.imgbb.com/1/upload?key=${
-            import.meta.env.VITE_IMGBB_API
-          }`,
-          imageFile
-        );
+        const res = await uploadImage(profileImage);
         if (res.data.success) {
           await createUser(email, password);
           toast.success("Sign up successfully.");

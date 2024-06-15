@@ -107,7 +107,7 @@ const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
             required: "Required",
             pattern: {
               value: /^(?!default$).*$/i,
-              message: "Pick subject subject",
+              message: "Pick subject category",
             },
           })}
           error={errors?.subjectCategory?.message}

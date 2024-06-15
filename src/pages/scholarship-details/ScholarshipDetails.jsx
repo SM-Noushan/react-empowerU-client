@@ -1,6 +1,7 @@
 import { Rating } from "flowbite-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
+import { Link, useLoaderData } from "react-router-dom";
 import {
   FaBook,
   FaBookmark,
@@ -9,11 +10,12 @@ import {
   FaMoneyCheck,
 } from "react-icons/fa6";
 
+import Container2 from "../../components/shared/Container2";
 import NavigationButton from "../../components/NavigationButton";
 import Review from "../../components/scholarship-details/Review";
-import { useLoaderData } from "react-router-dom";
 
 const ScholarshipDetails = () => {
+  const data = useLoaderData() || {};
   const {
     scholarshipCategory,
     scholarshipName,
@@ -27,9 +29,9 @@ const ScholarshipDetails = () => {
     serviceCharge,
     subjectCategory,
     applicationFee,
-  } = useLoaderData() || {};
+  } = data;
   return (
-    <section className="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased xl:min-h-[calc(100dvh-353.8px)] text-gray-900 dark:text-white">
+    <Container2>
       <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
           <div className="shrink-0 max-w-md lg:max-w-lg mx-auto space-y-6 flex flex-col justify-center items-center">
@@ -116,15 +118,18 @@ const ScholarshipDetails = () => {
                 Bookmark
               </button>
 
-              <button
+              <Link
+                to="/scholarship/apply"
+                state={{ data }}
                 className="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center justify-center"
                 role="button"
               >
                 Apply now
-              </button>
+              </Link>
             </div>
           </div>
         </div>
+        {/* reviews */}
         <div className="pt-16 relative">
           <h1 className="text-xl font-semibold  sm:text-2xl">
             Student Feedback
@@ -187,7 +192,7 @@ const ScholarshipDetails = () => {
           </div>
         </div>
       </div>
-    </section>
+    </Container2>
   );
 };
 

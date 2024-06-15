@@ -1,15 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import Main from "../layouts/Main";
-import Home from "../pages/home/Home";
 import Auth from "../pages/auth/Auth";
+import Home from "../pages/home/Home";
+import Dashboard from "../layouts/Dashboard";
 import Error from "../components/shared/Error";
 import PrivateRoute from "../routes/PrivateRoute";
-import AllScholarship from "../pages/all-scholarship/AllScholarship";
-import ScholarshipDetails from "../pages/scholarship-details/ScholarshipDetails";
-import Dashboard from "../layouts/Dashboard";
+import CheckOut from "../pages/checkout/CheckOut";
 import MyProfile from "../pages/my-profile/MyProfile";
+import AllScholarship from "../pages/all-scholarship/AllScholarship";
 import AddScholarship from "../pages/add-scholarships/AddScholarship";
+import ScholarshipDetails from "../pages/scholarship-details/ScholarshipDetails";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +35,14 @@ export const router = createBrowserRouter([
         ),
         loader: ({ params }) =>
           fetch(`http://localhost:5000/scholarship/${params.id}`),
+      },
+      {
+        path: "scholarship/apply",
+        element: (
+          <PrivateRoute>
+            <CheckOut />
+          </PrivateRoute>
+        ),
       },
     ],
   },
