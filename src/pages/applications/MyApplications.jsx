@@ -1,13 +1,13 @@
-import React from "react";
 import { Alert } from "flowbite-react";
-import DashboardContainer from "../../components/dashboard/shared/DashboardContainer";
 import { Helmet } from "react-helmet-async";
-import useFetchData from "../../hooks/useFetchData";
-import useAuth from "../../hooks/useAuth";
-import MyApplicationTable from "./MyApplicationTable";
 import { HiInformationCircle } from "react-icons/hi";
+
+import useAuth from "../../hooks/useAuth";
+import useFetchData from "../../hooks/useFetchData";
+import MyApplicationTable from "./MyApplicationTable";
 import MySpinner from "../../components/shared/MySpinner";
 import SectionHeading from "../../components/shared/SectionHeading";
+import DashboardContainer from "../../components/dashboard/shared/DashboardContainer";
 
 const MyApplications = () => {
   const { user } = useAuth();
@@ -17,7 +17,6 @@ const MyApplications = () => {
     {},
     true
   );
-  console.log(data, isLoading);
   return (
     <DashboardContainer>
       <Helmet>
@@ -37,7 +36,7 @@ const MyApplications = () => {
             <span className="font-medium">Info!</span> No Application Found.
           </Alert>
         ) : (
-          data.map((item) => <MyApplicationTable key={item._id} data={item} />)
+          <MyApplicationTable data={data} />
         )}
       </div>
     </DashboardContainer>
