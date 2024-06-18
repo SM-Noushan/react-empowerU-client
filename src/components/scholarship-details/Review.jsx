@@ -1,6 +1,8 @@
-import { Avatar, Blockquote } from "flowbite-react";
+import { Avatar, Blockquote, Rating } from "flowbite-react";
+import PropTypes from "prop-types";
 
-const Review = () => {
+const Review = ({ data }) => {
+  const { userName, userImage, reviewDate, rating, reviewMessage } = data;
   return (
     <figure className="mx-auto max-w-screen-md text-center">
       <svg
@@ -14,29 +16,31 @@ const Review = () => {
       </svg>
       <Blockquote>
         <p className="text-2xl font-medium italic text-gray-900 dark:text-white">
-          &#34;Flowbite is just awesome. It contains tons of predesigned
-          components and pages starting from login screen to complex dashboard.
-          Perfect choice for your next SaaS application.&#34;
+          &#34;{reviewMessage}&#34;
         </p>
       </Blockquote>
       <figcaption className="mt-6 flex items-center justify-center space-x-3">
-        <Avatar
-          rounded
-          size="xs"
-          img="/images/people/profile-picture-5.jpg"
-          alt="profile picture"
-        />
+        <Avatar rounded size="xs" img={userImage} alt="reviewer-image" />
         <div className="flex items-center divide-x-2 divide-gray-500 dark:divide-gray-700">
-          <cite className="pr-3 font-medium text-gray-900 dark:text-white">
-            Micheal Gough
+          <cite className="pr-3 flex items-center gap-x-2 font-medium text-gray-900 dark:text-white">
+            {userName}
+            <Rating>
+              ({rating}
+              <Rating.Star className="size-3.5 text-gray-900 dark:text-white" />
+              )
+            </Rating>
           </cite>
           <cite className="pl-3 text-sm text-gray-500 dark:text-gray-400">
-            CEO at Google
+            On: {reviewDate}
           </cite>
         </div>
       </figcaption>
     </figure>
   );
+};
+
+Review.propTypes = {
+  data: PropTypes.object.isRequired,
 };
 
 export default Review;

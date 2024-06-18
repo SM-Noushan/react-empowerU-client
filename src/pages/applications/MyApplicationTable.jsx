@@ -21,7 +21,7 @@ const MyApplicationTable = ({ data }) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [modalData, setModalData] = useState({});
-  const [reviewId, setReviewId] = useState(null);
+  const [reviewId, setReviewId] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [reviewModal, setReviewModal] = useState(false);

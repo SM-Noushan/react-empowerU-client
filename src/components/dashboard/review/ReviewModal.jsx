@@ -1,16 +1,17 @@
-import { Modal } from "flowbite-react";
-import { Controller, useForm } from "react-hook-form";
-import { useEffect, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { FaArrowRotateLeft, FaCircleExclamation } from "react-icons/fa6";
 import ReactStarsRating from "react-awesome-stars-rating";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { Modal } from "flowbite-react";
+import moment from "moment";
+import PropTypes from "prop-types";
 
+import useAuth from "../../../hooks/useAuth";
 import SubmitButton from "../../form/SubmitButton";
 import usePostData from "../../../hooks/usePostData";
 import TextAreaInput from "../../form/TextAreaInput";
-import { FaArrowRotateLeft, FaCircleExclamation } from "react-icons/fa6";
-import useAuth from "../../../hooks/useAuth";
-import moment from "moment";
-import { toast } from "react-toastify";
 
 const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
   const { user } = useAuth();
@@ -21,7 +22,6 @@ const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
     formState: { errors, dirtyFields },
     reset,
     // setValue,
-    control,
   } = useForm();
   const [ratingValue, setRatingValue] = useState(0);
   const [rated, setRated] = useState(null);
@@ -64,7 +64,7 @@ const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
       const resDB = await addReviewMutation(obj);
       // console.log(resDB.data);
       if (resDB.data?.insertedId) {
-        queryClient.invalidateQueries(["myApplications"]);
+        queryClient.invalidateQueries(["myApplications, scholarships"]);
         toggleModalState(false);
         reset();
         setRated(0);
@@ -176,6 +176,12 @@ const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
       </Modal.Footer>
     </Modal>
   );
+};
+
+ReviewModal.propTypes = {
+  modalState: PropTypes.bool.isRequired,
+  toggleModalState: PropTypes.func.isRequired,
+  scholarshipId: PropTypes.string.isRequired,
 };
 
 export default ReviewModal;

@@ -1,4 +1,4 @@
-import { Rating } from "flowbite-react";
+import { Blockquote, Rating } from "flowbite-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Link, useLoaderData } from "react-router-dom";
@@ -13,10 +13,14 @@ import {
 import Container2 from "../../components/shared/Container2";
 import NavigationButton from "../../components/NavigationButton";
 import Review from "../../components/scholarship-details/Review";
+import useAuth from "../../hooks/useAuth";
+import useFetchData from "../../hooks/useFetchData";
 
 const ScholarshipDetails = () => {
+  const { user } = useAuth();
   const data = useLoaderData() || {};
   const {
+    _id,
     scholarshipCategory,
     scholarshipName,
     scholarshipDescription,
@@ -29,7 +33,19 @@ const ScholarshipDetails = () => {
     serviceCharge,
     subjectCategory,
     applicationFee,
+    reviews,
   } = data;
+  const totalRating = reviews.reduce(
+    (acc, curr) => (acc = acc + curr.rating),
+    0
+  );
+  const { data: applyStatus, isLoading: applyStatusLoading } = useFetchData(
+    `alreadyApplied-${user?.id}`,
+    `appliedScholarships/applyStatus/${_id}`,
+    {},
+    true
+  );
+
   return (
     <Container2>
       <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
@@ -94,13 +110,15 @@ const ScholarshipDetails = () => {
                 <li className="flex items-center space-x-3">
                   {/* <!-- Icon --> */}
                   <Rating className="mb-2.5 lg:text-xl">
-                    <Rating.Star />
-                    <p className="ml-2 text-sm font-bold text-gray-900 dark:text-white">
-                      4.95
+                    <Rating.Star className="text-gray-900 dark:text-white" />
+                    <p className="ml-2 text-sm font-bold">
+                      {reviews.length
+                        ? (totalRating / reviews.length).toFixed(2)
+                        : "None"}
                     </p>
                     <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-500 dark:bg-gray-400" />
                     <p className="text-sm font-medium text-gray-900 underline dark:text-white">
-                      73 reviews
+                      {reviews.length} reviews
                     </p>
                   </Rating>
                 </li>
@@ -119,12 +137,21 @@ const ScholarshipDetails = () => {
               </button>
 
               <Link
-                to="/scholarship/apply"
+                to={
+                  applyStatusLoading
+                    ? ""
+                    : applyStatus?.result
+                    ? ""
+                    : "/scholarship/apply"
+                }
                 state={{ data }}
                 className="text-white mt-4 sm:mt-0 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 flex items-center justify-center"
-                role="button"
               >
-                Apply now
+                {applyStatusLoading
+                  ? ""
+                  : applyStatus?.result
+                  ? "Already Applied"
+                  : "Apply Now"}
               </Link>
             </div>
           </div>
@@ -134,62 +161,77 @@ const ScholarshipDetails = () => {
           <h1 className="text-xl font-semibold  sm:text-2xl">
             Student Feedback
           </h1>
-          <Swiper
-            autoplay={{ delay: 3000 }}
-            loop={true}
-            navigation={{
-              nextEl: ".nextSlideReview",
-              prevEl: ".prevSlideReview",
-            }}
-            modules={[Navigation, Autoplay]}
-          >
-            <SwiperSlide>
-              <Review />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Review />
-            </SwiperSlide>
-            <SwiperSlide>
-              <Review />
-            </SwiperSlide>
-          </Swiper>
+          {reviews.length === 0 ? (
+            <div className="flex flex-col-reverse items-center justify-center gap-2 h-28">
+              <Blockquote>
+                <p className="text-2xl font-medium italic text-gray-900 dark:text-white">
+                  No Reviews
+                </p>
+              </Blockquote>
+              <Rating>
+                <Rating.Star filled={false} />
+                <Rating.Star filled={false} />
+                <Rating.Star filled={false} />
+                <Rating.Star filled={false} />
+                <Rating.Star filled={false} />
+              </Rating>
+            </div>
+          ) : (
+            <Swiper
+              autoplay={{ delay: 3000 }}
+              loop={reviews.length > 1 ? true : false}
+              navigation={{
+                nextEl: ".nextSlideReview",
+                prevEl: ".prevSlideReview",
+              }}
+              modules={[Navigation, Autoplay]}
+            >
+              {reviews.map((review) => (
+                <SwiperSlide key={review._id}>
+                  <Review data={review} />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
           {/* slide navigate button */}
-          <div className="inset-0 flex items-center justify-between w-full absolute z-10 h-fit top-1/2 translate-y-1/2 max-w-screen-lg mx-auto">
-            <NavigationButton css="prevSlideReview">
-              <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M13.729 5.575c1.304-1.074 3.27-.146 3.27 1.544v9.762c0 1.69-1.966 2.618-3.27 1.544l-5.927-4.881a2 2 0 0 1 0-3.088l5.927-4.88Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </NavigationButton>
-            <NavigationButton css="nextSlideReview">
-              <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10.271 5.575C8.967 4.501 7 5.43 7 7.12v9.762c0 1.69 1.967 2.618 3.271 1.544l5.927-4.881a2 2 0 0 0 0-3.088l-5.927-4.88Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </NavigationButton>
-          </div>
+          {reviews.length > 0 && (
+            <div className="inset-0 flex items-center justify-between w-full absolute z-10 h-fit top-1/2 translate-y-1/2 max-w-screen-lg mx-auto">
+              <NavigationButton css="prevSlideReview">
+                <svg
+                  className="w-6 h-6 text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M13.729 5.575c1.304-1.074 3.27-.146 3.27 1.544v9.762c0 1.69-1.966 2.618-3.27 1.544l-5.927-4.881a2 2 0 0 1 0-3.088l5.927-4.88Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </NavigationButton>
+              <NavigationButton css="nextSlideReview">
+                <svg
+                  className="w-6 h-6 text-gray-800 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10.271 5.575C8.967 4.501 7 5.43 7 7.12v9.762c0 1.69 1.967 2.618 3.271 1.544l5.927-4.881a2 2 0 0 0 0-3.088l-5.927-4.88Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </NavigationButton>
+            </div>
+          )}
         </div>
       </div>
     </Container2>

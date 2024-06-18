@@ -20,7 +20,12 @@ const ScholarshipCard = ({ data }) => {
     applicationDeadline,
     subjectCategory,
     applicationFee,
-  } = data; //todo rating
+    reviews,
+  } = data;
+  const totalRating = reviews.reduce(
+    (acc, curr) => (acc = acc + curr.rating),
+    0
+  );
   const navigate = useNavigate();
 
   return (
@@ -73,11 +78,13 @@ const ScholarshipCard = ({ data }) => {
             <Rating className="mb-2.5 lg:text-xl">
               <Rating.Star />
               <p className="ml-2 text-sm font-bold text-gray-900 dark:text-white">
-                4.95
+                {reviews.length
+                  ? (totalRating / reviews.length).toFixed(2)
+                  : "None"}
               </p>
               <span className="mx-1.5 h-1 w-1 rounded-full bg-gray-500 dark:bg-gray-400" />
               <p className="text-sm font-medium text-gray-900 underline dark:text-white">
-                73 reviews
+                {reviews.length} reviews
               </p>
             </Rating>
           </li>

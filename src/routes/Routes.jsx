@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
-      
+
       // admin or mod
       {
         path: "scholarship/add",
