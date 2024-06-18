@@ -21,7 +21,7 @@ import { DarkThemeToggle, Flowbite } from "flowbite-react";
 import SidebarItem from "./SidebarItem";
 import logo from "../../../../assets/logo.jpg";
 import useAuth from "../../../../hooks/useAuth";
-import useAdmin from "../../../../hooks/useAdmin.jsx";
+import useAdmin from "../../../../hooks/useAdmin";
 import useModerator from "../../../../hooks/useModerator.jsx";
 
 const userSideBarItem = [

@@ -5,6 +5,7 @@ import Auth from "../pages/auth/Auth";
 import Home from "../pages/home/Home";
 import Dashboard from "../layouts/Dashboard";
 import Error from "../components/shared/Error";
+import AdminOrModRoute from "./AdminOrModRoute";
 import PrivateRoute from "../routes/PrivateRoute";
 import CheckOut from "../pages/checkout/CheckOut";
 import MyProfile from "../pages/my-profile/MyProfile";
@@ -59,36 +60,24 @@ export const router = createBrowserRouter([
       // user
       {
         path: "profile",
-        element: (
-          <PrivateRoute>
-            <MyProfile />
-          </PrivateRoute>
-        ),
+        element: <MyProfile />,
       },
       {
         path: "applications",
-        element: (
-          <PrivateRoute>
-            <MyApplications />
-          </PrivateRoute>
-        ),
+        element: <MyApplications />,
       },
       {
         path: "reviews",
-        element: (
-          <PrivateRoute>
-            <MyReviews />
-          </PrivateRoute>
-        ),
+        element: <MyReviews />,
       },
 
-      // admin or mod
+      // admin and mod
       {
         path: "scholarship/add",
         element: (
-          <PrivateRoute>
+          <AdminOrModRoute role="adminAndMod">
             <AddScholarship />
-          </PrivateRoute>
+          </AdminOrModRoute>
         ),
       },
     ],

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 
 import useAuth from "../../hooks/useAuth";
-import useAdmin from "../../hooks/useAdmin.jsx";
+import useAdmin from "../../hooks/useAdmin";
 import uploadImage from "../../utils/uploadImage";
 import useModerator from "../../hooks/useModerator";
 import validateImage from "../../utils/validateImage";
