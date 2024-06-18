@@ -1,33 +1,30 @@
-import useAuth from "../../hooks/useAuth";
-import useFetchData from "../../hooks/useFetchData";
-import DashboardContainer from "../../components/dashboard/shared/DashboardContainer";
-import { Helmet } from "react-helmet-async";
 import {
   FaEllipsisVertical,
   FaPenToSquare,
   FaRegRectangleXmark,
 } from "react-icons/fa6";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Alert, Button, Dropdown, Table } from "flowbite-react";
-
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet-async";
+import { HiInformationCircle } from "react-icons/hi";
+import { Alert, Dropdown, Table } from "flowbite-react";
+
+import useAuth from "../../hooks/useAuth";
 import usePostData from "../../hooks/usePostData";
+import useFetchData from "../../hooks/useFetchData";
 import PopUpModal from "../../components/PopUpModal";
 import { useQueryClient } from "@tanstack/react-query";
-import SectionHeading from "../../components/shared/SectionHeading";
 import MySpinner from "../../components/shared/MySpinner";
-import { HiInformationCircle } from "react-icons/hi";
-// import ReviewModal from "../../components/dashboard/review/ReviewModal";
+import SectionHeading from "../../components/shared/SectionHeading";
+import ReviewModal from "../../components/dashboard/review/ReviewModal";
+import DashboardContainer from "../../components/dashboard/shared/DashboardContainer";
 
 const MyReviews = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  //   const [modalData, setModalData] = useState({});
-  const [reviewId, setReviewId] = useState("");
-  //   const [openModal, setOpenModal] = useState(false);
+  const [reviewData, setReviewData] = useState({});
   const [deleteModal, setDeleteModal] = useState(false);
-  //   const [reviewModal, setReviewModal] = useState(false);
+  const [reviewModal, setReviewModal] = useState(false);
 
   const { data, isLoading } = useFetchData(
     "myReviews",
@@ -38,7 +35,7 @@ const MyReviews = () => {
 
   const { mutateAsync: deleteReviewMutation } = usePostData();
 
-  const handleDelete = async (id) => {
+  const handleDelete = async ({ id }) => {
     try {
       const object = {
         method: "delete",
@@ -46,9 +43,11 @@ const MyReviews = () => {
       };
       const resDB = await deleteReviewMutation(object);
       if (resDB.data?.deletedCount) {
-        setReviewId("");
+        setReviewData({});
         setDeleteModal(false);
-        queryClient.invalidateQueries(["myApplications, myReviews"]);
+        queryClient.invalidateQueries([
+          "myReviews, myApplications, scholarships",
+        ]);
         return toast.success("Review Deleted");
       }
     } catch (error) {
@@ -98,7 +97,9 @@ const MyReviews = () => {
                   <Table.Cell>
                     {review.scholarshipDetails.universityName}
                   </Table.Cell>
-                  <Table.Cell>{review.reviewMessage}</Table.Cell>
+                  <Table.Cell className="max-w-xs text-justify">
+                    {review.reviewMessage}
+                  </Table.Cell>
                   <Table.Cell>{review.rating}</Table.Cell>
                   <Table.Cell>{review.reviewDate}</Table.Cell>
                   <Table.Cell className="*:cursor-pointer">
@@ -112,7 +113,10 @@ const MyReviews = () => {
                     >
                       <Dropdown.Item
                         icon={FaPenToSquare}
-                        //   onClick={() => handleEdit(d)}
+                        onClick={() => {
+                          setReviewData(review);
+                          setReviewModal(true);
+                        }}
                       >
                         Edit
                       </Dropdown.Item>
@@ -120,7 +124,7 @@ const MyReviews = () => {
                         className="text-red-400 dark:text-red-600"
                         icon={FaRegRectangleXmark}
                         onClick={() => {
-                          setReviewId(review._id);
+                          setReviewData({ id: review._id });
                           setDeleteModal(true);
                         }}
                       >
@@ -128,17 +132,6 @@ const MyReviews = () => {
                       </Dropdown.Item>
                     </Dropdown>
                   </Table.Cell>
-                  {/* <Table.Cell>
-                      <Button
-                        onClick={() => {
-                          setReviewId(d.scholarshipId);
-                          setReviewModal(true);
-                        }}
-                        disabled={d.reviewStatus}
-                      >
-                        Review
-                      </Button>
-                    </Table.Cell> */}
                 </Table.Row>
               ))}
             </Table.Body>
@@ -148,8 +141,16 @@ const MyReviews = () => {
         <PopUpModal
           modalState={deleteModal}
           toggleModal={setDeleteModal}
-          onClick={() => handleDelete(reviewId)}
+          onClick={() => handleDelete(reviewData)}
           typeDelete={true}
+        />
+
+        {/* review modal */}
+        <ReviewModal
+          modalState={reviewModal}
+          toggleModalState={setReviewModal}
+          defaultData={reviewData}
+          edit={true}
         />
       </div>
     </DashboardContainer>

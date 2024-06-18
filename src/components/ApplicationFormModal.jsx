@@ -69,7 +69,7 @@ const ApplicationFormModal = ({
   const onCloseModal = () => {
     setOpenModal(false);
   };
-  
+
   const handleFormSubmit = async (data) => {
     setLoading(true);
     if (edit) {
@@ -78,14 +78,14 @@ const ApplicationFormModal = ({
           acc[key] = data[key];
           return acc;
         }, {});
+        if (Object.keys(modifiedData).length === 0) {
+          setLoading(false);
+          return toast.warn("No changes were made");
+        }
         if (modifiedData.applicantPhoto) {
           const res = await uploadImage(modifiedData.applicantPhoto);
           if (res.data.success)
             modifiedData.applicantPhoto = res.data.data.display_url;
-        }
-        if (Object.keys(modifiedData).length === 0) {
-          setLoading(false);
-          return toast.warn("No changes were made");
         }
         const object = {
           method: "patch",

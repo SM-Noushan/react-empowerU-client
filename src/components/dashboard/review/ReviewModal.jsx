@@ -5,23 +5,29 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { Modal } from "flowbite-react";
-import moment from "moment";
 import PropTypes from "prop-types";
+import moment from "moment";
 
 import useAuth from "../../../hooks/useAuth";
 import SubmitButton from "../../form/SubmitButton";
 import usePostData from "../../../hooks/usePostData";
 import TextAreaInput from "../../form/TextAreaInput";
 
-const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
+const ReviewModal = ({
+  modalState,
+  toggleModalState,
+  scholarshipId = "",
+  edit = false,
+  defaultData = null,
+}) => {
   const { user } = useAuth();
   const formRef = useRef();
   const {
     register,
     handleSubmit,
-    formState: { errors, dirtyFields },
+    formState: { errors },
     reset,
-    // setValue,
+    setValue,
   } = useForm();
   const [ratingValue, setRatingValue] = useState(0);
   const [rated, setRated] = useState(null);
@@ -30,51 +36,92 @@ const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
   const queryClient = useQueryClient();
 
   const { mutateAsync: addReviewMutation } = usePostData();
-  // const { mutateAsync: editReviewMutation } = usePostData();
+  const { mutateAsync: editReviewMutation } = usePostData();
 
   useEffect(() => {
-    reset();
-  }, [scholarshipId]);
+    if (!edit) reset();
+    if (edit) {
+      setRated(true);
+      setIsEdit(true);
+      setRatingValue(defaultData.rating);
+      setValue("reviewMessage", defaultData.reviewMessage);
+    }
+  }, [scholarshipId, defaultData]);
 
   const handleFormSubmit = async (data) => {
-    if (!rated) return;
-    setLoading(true);
-    const reviewDate = new moment().format("DD MMMM, YYYY");
-    const userName = user?.displayName || "Anonymous";
-    const userEmail = user?.email || "Anonymous";
-    const userUID = user?.uid;
-    const userImage = user?.photoURL;
-    const updatedData = {
-      ...data,
-      rating: ratingValue,
-      reviewDate,
-      userName,
-      userEmail,
-      userUID,
-      userImage,
-      scholarshipId,
-    };
-    // console.log(updatedData);
-    const obj = {
-      method: "post",
-      url: "reviews",
-      data: updatedData,
-    };
-    try {
-      const resDB = await addReviewMutation(obj);
-      // console.log(resDB.data);
-      if (resDB.data?.insertedId) {
-        queryClient.invalidateQueries(["myApplications, scholarships"]);
-        toggleModalState(false);
-        reset();
-        setRated(0);
-        setRated(null);
-        setIsEdit(true);
-        toast.success("Review Added");
+    if (edit) {
+      if (ratingValue === 0) return;
+      if (
+        defaultData.rating === ratingValue &&
+        defaultData.reviewMessage === data.reviewMessage
+      )
+        return toast.warn("No changes were made");
+      data.rating = ratingValue;
+      const obj = {
+        method: "patch",
+        url: `reviews/${defaultData._id}?uid=${user.uid}`,
+        data: data,
+      };
+      try {
+        const resDB = await editReviewMutation(obj);
+        // console.log(resDB.data);
+        if (resDB.data?.modifiedCount) {
+          queryClient.invalidateQueries([
+            "myReviews, myApplications, scholarships",
+          ]);
+          toggleModalState(false);
+          setRatingValue(data.rating);
+          setIsEdit(true);
+          setRated(null);
+          reset();
+          toast.success("Review Updated");
+        }
+      } catch (error) {
+        // console.log(error);
+        toast.error("Failed! Try again.");
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed! Try again.");
+    } else {
+      if (!rated) return;
+      setLoading(true);
+      const reviewDate = new moment().format("DD MMMM, YYYY");
+      const userName = user?.displayName || "Anonymous";
+      const userEmail = user?.email || "Anonymous";
+      const userUID = user?.uid;
+      const userImage = user?.photoURL;
+      const updatedData = {
+        ...data,
+        rating: ratingValue,
+        reviewDate,
+        userName,
+        userEmail,
+        userUID,
+        userImage,
+        scholarshipId,
+      };
+      // console.log(updatedData);
+      const obj = {
+        method: "post",
+        url: "reviews",
+        data: updatedData,
+      };
+      try {
+        const resDB = await addReviewMutation(obj);
+        // console.log(resDB.data);
+        if (resDB.data?.insertedId) {
+          queryClient.invalidateQueries([
+            "myApplications, scholarships, myReviews",
+          ]);
+          toggleModalState(false);
+          setRatingValue(0);
+          setIsEdit(true);
+          setRated(null);
+          reset();
+          toast.success("Review Added");
+        }
+      } catch (error) {
+        // console.log(error);
+        toast.error("Failed! Try again.");
+      }
     }
     return setLoading(false);
   };
@@ -88,7 +135,7 @@ const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
     >
       <Modal.Header>
         <span className="text-2xl font-medium text-gray-900 dark:text-white pl-4">
-          Share Your Feedback
+          {edit ? "Update Feedback" : "Share Your Feedback"}
         </span>
       </Modal.Header>
 
@@ -160,8 +207,7 @@ const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
       </Modal.Body>
       <Modal.Footer>
         <SubmitButton
-          label="Review"
-          //   label={edit ? "Update now" : "Apply now"}
+          label={edit ? "Update" : "Add"}
           dependencies={{ loading }}
           onClick={() => {
             if (!rated) setRated(false);
@@ -181,7 +227,9 @@ const ReviewModal = ({ modalState, toggleModalState, scholarshipId }) => {
 ReviewModal.propTypes = {
   modalState: PropTypes.bool.isRequired,
   toggleModalState: PropTypes.func.isRequired,
-  scholarshipId: PropTypes.string.isRequired,
+  scholarshipId: PropTypes.string,
+  edit: PropTypes.bool,
+  defaultData: PropTypes.object,
 };
 
 export default ReviewModal;
