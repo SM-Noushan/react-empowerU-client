@@ -14,8 +14,8 @@ import useAuth from "../../hooks/useAuth";
 import usePostData from "../../hooks/usePostData";
 import PopUpModal from "../../components/PopUpModal";
 import { useQueryClient } from "@tanstack/react-query";
-import ApplicationFormModal from "../../components/ApplicationFormModal";
 import ReviewModal from "../../components/dashboard/review/ReviewModal";
+import ApplicationFormModal from "../../components/ApplicationFormModal";
 
 const MyApplicationTable = ({ data }) => {
   const { user } = useAuth();

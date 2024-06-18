@@ -8,6 +8,7 @@ import Error from "../components/shared/Error";
 import PrivateRoute from "../routes/PrivateRoute";
 import CheckOut from "../pages/checkout/CheckOut";
 import MyProfile from "../pages/my-profile/MyProfile";
+import MyReviews from "../pages/my-reviews/MyReviews";
 import MyApplications from "../pages/applications/MyApplications";
 import AllScholarship from "../pages/all-scholarship/AllScholarship";
 import AddScholarship from "../pages/add-scholarships/AddScholarship";
@@ -69,6 +70,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <MyApplications />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "reviews",
+        element: (
+          <PrivateRoute>
+            <MyReviews />
           </PrivateRoute>
         ),
       },

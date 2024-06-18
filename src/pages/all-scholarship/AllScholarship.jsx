@@ -1,8 +1,9 @@
 import { Helmet } from "react-helmet-async";
-import ScholarshipCard from "../../components/ScholarshipCard";
-import SectionHeading from "../../components/shared/SectionHeading";
+
 import useFetchData from "../../hooks/useFetchData";
+import ScholarshipCard from "../../components/ScholarshipCard";
 import SkeletonCard from "../../components/skeleton/SkeletonCard";
+import SectionHeading from "../../components/shared/SectionHeading";
 
 const AllScholarship = () => {
   const { data, isLoading } = useFetchData("scholarships", "scholarships");

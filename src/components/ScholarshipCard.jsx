@@ -4,9 +4,9 @@ import {
   FaMapLocationDot,
   FaMoneyCheck,
 } from "react-icons/fa6";
+import PropTypes from "prop-types";
 import { Rating } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
 
 const ScholarshipCard = ({ data }) => {
   const {
