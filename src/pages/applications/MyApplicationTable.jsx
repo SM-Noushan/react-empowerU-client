@@ -12,17 +12,20 @@ import { Button, Dropdown, Table } from "flowbite-react";
 import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import usePostData from "../../hooks/usePostData";
+import PopUpModal from "../../components/PopUpModal";
 import { useQueryClient } from "@tanstack/react-query";
 import ApplicationFormModal from "../../components/ApplicationFormModal";
-import PopUpModal from "../../components/PopUpModal";
+import ReviewModal from "../../components/dashboard/review/ReviewModal";
 
 const MyApplicationTable = ({ data }) => {
   const { user } = useAuth();
-  const [cancelApplication, setCancelApplication] = useState(null);
+  const queryClient = useQueryClient();
   const [modalData, setModalData] = useState({});
+  const [reviewId, setReviewId] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
-  const queryClient = useQueryClient();
+  const [reviewModal, setReviewModal] = useState(false);
+  const [cancelApplication, setCancelApplication] = useState(null);
 
   const { mutateAsync: cancelScholarshipMutation } = usePostData();
 
@@ -92,7 +95,7 @@ const MyApplicationTable = ({ data }) => {
               <Table.Cell>{d.additionalDetails.applicationFee}$</Table.Cell>
               <Table.Cell>{d.additionalDetails.serviceCharge}$</Table.Cell>
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                {status || "Pending"}
+                {d.status || "Pending"}
               </Table.Cell>
               <Table.Cell className="*:cursor-pointer">
                 <Dropdown
@@ -130,8 +133,11 @@ const MyApplicationTable = ({ data }) => {
               </Table.Cell>
               <Table.Cell>
                 <Button
-                //   onClick={() => setOpenModal(true)}
-                //   disabled={!payStatus}
+                  onClick={() => {
+                    setReviewId(d.scholarshipId);
+                    setReviewModal(true);
+                  }}
+                  disabled={d.reviewStatus}
                 >
                   Review
                 </Button>
@@ -150,6 +156,11 @@ const MyApplicationTable = ({ data }) => {
         setOpenModal={setOpenModal}
         data={modalData}
         edit={true}
+      />
+      <ReviewModal
+        modalState={reviewModal}
+        toggleModalState={setReviewModal}
+        scholarshipId={reviewId}
       />
     </>
   );

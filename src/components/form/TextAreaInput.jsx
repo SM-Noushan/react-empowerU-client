@@ -8,19 +8,6 @@ const TextAreaInput = forwardRef(function TextAreaInput(
 ) {
   return (
     <div className="relative">
-      {/* <input
-        type={type}
-        name={name}
-        id={name}
-        onChange={onChange}
-        onBlur={onBlur}
-        ref={ref}
-        disabled={disable}
-        step={name === "universityWorldRank" ? 1 : 0.01}
-        
-        className={`block  border-0 border-b-2  `}
-      /> */}
-
       <textarea
         name={name}
         id={name}
