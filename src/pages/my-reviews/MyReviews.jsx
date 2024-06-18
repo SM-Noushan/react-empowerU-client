@@ -1,13 +1,10 @@
-import React from "react";
 import useAuth from "../../hooks/useAuth";
 import useFetchData from "../../hooks/useFetchData";
 import DashboardContainer from "../../components/dashboard/shared/DashboardContainer";
 import { Helmet } from "react-helmet-async";
-import PropTypes from "prop-types";
 import {
   FaEllipsisVertical,
   FaPenToSquare,
-  FaRegRectangleList,
   FaRegRectangleXmark,
 } from "react-icons/fa6";
 import { useState } from "react";
@@ -15,8 +12,8 @@ import { Link } from "react-router-dom";
 import { Alert, Button, Dropdown, Table } from "flowbite-react";
 
 import { toast } from "react-toastify";
-// import usePostData from "../../hooks/usePostData";
-// import PopUpModal from "../../components/PopUpModal";
+import usePostData from "../../hooks/usePostData";
+import PopUpModal from "../../components/PopUpModal";
 import { useQueryClient } from "@tanstack/react-query";
 import SectionHeading from "../../components/shared/SectionHeading";
 import MySpinner from "../../components/shared/MySpinner";
@@ -25,12 +22,40 @@ import { HiInformationCircle } from "react-icons/hi";
 
 const MyReviews = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+  //   const [modalData, setModalData] = useState({});
+  const [reviewId, setReviewId] = useState("");
+  //   const [openModal, setOpenModal] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  //   const [reviewModal, setReviewModal] = useState(false);
+
   const { data, isLoading } = useFetchData(
     "myReviews",
     `reviews/${user?.uid}`,
     {},
     true
   );
+
+  const { mutateAsync: deleteReviewMutation } = usePostData();
+
+  const handleDelete = async (id) => {
+    try {
+      const object = {
+        method: "delete",
+        url: `reviews/${id}?uid=${user.uid}`,
+      };
+      const resDB = await deleteReviewMutation(object);
+      if (resDB.data?.deletedCount) {
+        setReviewId("");
+        setDeleteModal(false);
+        queryClient.invalidateQueries(["myApplications, myReviews"]);
+        return toast.success("Review Deleted");
+      }
+    } catch (error) {
+      console.log(error);
+      return toast.error("Failed! Try again");
+    }
+  };
   return (
     <DashboardContainer>
       <Helmet>
@@ -94,10 +119,10 @@ const MyReviews = () => {
                       <Dropdown.Item
                         className="text-red-400 dark:text-red-600"
                         icon={FaRegRectangleXmark}
-                        //   onClick={() => {
-                        //     setCancelApplication(d._id);
-                        //     setDeleteModal(true);
-                        //   }}
+                        onClick={() => {
+                          setReviewId(review._id);
+                          setDeleteModal(true);
+                        }}
                       >
                         Delete
                       </Dropdown.Item>
@@ -119,6 +144,13 @@ const MyReviews = () => {
             </Table.Body>
           </Table>
         )}
+        {/* confirm before delete */}
+        <PopUpModal
+          modalState={deleteModal}
+          toggleModal={setDeleteModal}
+          onClick={() => handleDelete(reviewId)}
+          typeDelete={true}
+        />
       </div>
     </DashboardContainer>
   );
