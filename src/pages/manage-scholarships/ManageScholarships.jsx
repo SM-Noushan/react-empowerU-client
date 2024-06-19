@@ -29,39 +29,36 @@ const ManageScholarships = () => {
   const { data, isLoading } = useFetchData("scholarships", `scholarships`);
 
   const queryClient = useQueryClient();
-  const [modalData, setModalData] = useState({});
-  const [reviewId, setReviewId] = useState("");
-  const [openModal, setOpenModal] = useState(false);
+  const [deleteId, setDeleteId] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
-  const [reviewModal, setReviewModal] = useState(false);
-  const [cancelApplication, setCancelApplication] = useState(null);
 
-  const { mutateAsync: cancelScholarshipMutation } = usePostData();
+  const { mutateAsync: deleteScholarshipMutation } = usePostData();
 
-  const handleEdit = (d) => {
-    setModalData(d);
-    if (d.status?.toLowerCase() === "pending" || !d.status) {
-      return setOpenModal(true);
-    } else return toast.warn("Application is in process!");
+  //   const handleEdit = (d) => {
+  //     setModalData(d);
+  //     if (d.status?.toLowerCase() === "pending" || !d.status) {
+  //       return setOpenModal(true);
+  //     } else return toast.warn("Application is in process!");
+  //   };
+
+  const handleDelete = async (id) => {
+    try {
+      const object = {
+        method: "delete",
+        url: `scholarships/${id}?uid=${user.uid}`,
+      };
+      const resDB = await deleteScholarshipMutation(object);
+      if (resDB.data?.deletedCount) {
+        setDeleteModal(false);
+        queryClient.invalidateQueries(["scholarships, myApplications"]);
+        return toast.success("Deleted Successfully");
+      }
+    } catch (error) {
+      console.log(error);
+      return toast.error("Failed! Try again");
+    }
   };
-
-  const handleCancel = async (id) => {
-    // try {
-    //   const object = {
-    //     method: "delete",
-    //     url: `appliedScholarships/${id}?uid=${user.uid}`,
-    //   };
-    //   const resDB = await cancelScholarshipMutation(object);
-    //   if (resDB.data?.modifiedCount) {
-    //     setDeleteModal(false);
-    //     queryClient.invalidateQueries(["myApplications"]);
-    //     return toast.success("Application cancelled");
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   return toast.error("Failed! Try again");
-    // }
-  };
+  
   return (
     <DashboardContainer>
       <Helmet>
@@ -145,7 +142,7 @@ const ManageScholarships = () => {
                         className="text-red-400 dark:text-red-600"
                         icon={FaRegRectangleXmark}
                         onClick={() => {
-                          setCancelApplication(d._id);
+                          setDeleteId(d._id);
                           setDeleteModal(true);
                         }}
                       >
@@ -163,7 +160,7 @@ const ManageScholarships = () => {
       <PopUpModal
         modalState={deleteModal}
         toggleModal={setDeleteModal}
-        onClick={() => handleCancel(cancelApplication)}
+        onClick={() => handleDelete(deleteId)}
       />
     </DashboardContainer>
   );
