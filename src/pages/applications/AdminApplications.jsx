@@ -1,4 +1,4 @@
-import { Alert } from "flowbite-react";
+import { Alert, Modal } from "flowbite-react";
 import { Helmet } from "react-helmet-async";
 import { HiInformationCircle } from "react-icons/hi";
 
@@ -15,7 +15,7 @@ import {
   FaRegRectangleList,
   FaRegRectangleXmark,
 } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Button, Dropdown, Table } from "flowbite-react";
@@ -25,6 +25,8 @@ import PopUpModal from "../../components/PopUpModal";
 import { useQueryClient } from "@tanstack/react-query";
 import ReviewModal from "../../components/dashboard/review/ReviewModal";
 import ApplicationFormModal from "../../components/ApplicationFormModal";
+import CommonInput from "../../components/form/CommonInput";
+import { useForm } from "react-hook-form";
 
 const AdminApplications = () => {
   const { user } = useAuth();
@@ -36,12 +38,21 @@ const AdminApplications = () => {
   );
   console.log(data);
 
-  const queryClient = useQueryClient();
+  const { register, setValue } = useForm();
+
   const [modalData, setModalData] = useState({});
+  useEffect(() => {
+    setValue("name", modalData.applicantName);
+    setValue("university", modalData.additionalDetails?.universityName);
+    setValue("degree", modalData.applicantDegree);
+    setValue("scholarship", modalData.additionalDetails?.scholarshipCategory);
+  }, [modalData]);
+
+  const queryClient = useQueryClient();
   const [reviewId, setReviewId] = useState("");
-  const [openModal, setOpenModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [reviewModal, setReviewModal] = useState(false);
+  const [detailsModal, setDetailsModal] = useState(false);
   const [cancelApplication, setCancelApplication] = useState(null);
 
   const { mutateAsync: cancelScholarshipMutation } = usePostData();
@@ -113,8 +124,10 @@ const AdminApplications = () => {
                     >
                       <Dropdown.Item
                         icon={FaRegRectangleList}
-                        as={Link}
-                        to={`/scholarship/${d.scholarshipId}`}
+                        onClick={() => {
+                          setModalData(d);
+                          setDetailsModal(true);
+                        }}
                       >
                         Details
                       </Dropdown.Item>
@@ -142,6 +155,65 @@ const AdminApplications = () => {
           </Table>
         )}
       </div>
+      {/* modal: view applicants details */}
+      {detailsModal && (
+        <Modal
+          show={detailsModal}
+          size="md"
+          onClose={() => setDetailsModal(false)}
+          popup
+        >
+          <Modal.Header>
+            <span className="text-2xl font-medium text-gray-900 dark:text-white pl-4">
+              Applicant&apos;s Details
+            </span>
+          </Modal.Header>
+
+          <Modal.Body className="pb-0 text-center mx-auto space-y-2.5 mb-6">
+            {/* photo */}
+            <img
+              src={modalData.applicantPhoto}
+              alt="applicant-photo"
+              className="h-36 rounded-md"
+            />
+            <div className="flex items-center gap-2.5">
+              {/* applicant's name */}
+              <CommonInput
+                label="Applicant's Name"
+                inputType="text"
+                readOnly={true}
+                {...register("name")}
+              />
+
+              {/* scholarship type */}
+              <CommonInput
+                label="Scholarship Type"
+                inputType="text"
+                readOnly={true}
+                {...register("scholarship")}
+              />
+            </div>
+
+            <div className="flex items-center gap-2.5">
+              {/* applied university */}
+              <CommonInput
+                label="Applied University"
+                inputType="text"
+                readOnly={true}
+                {...register("university")}
+              />
+
+              {/* applied degree */}
+              <CommonInput
+                label="Applied Degree"
+                inputType="text"
+                readOnly={true}
+                {...register("degree")}
+              />
+            </div>
+          </Modal.Body>
+        </Modal>
+      )}
     </DashboardContainer>
   );
 };
