@@ -11,6 +11,7 @@ import DashboardContainer from "../../components/dashboard/shared/DashboardConta
 
 import {
   FaEllipsisVertical,
+  FaFileCircleExclamation,
   FaPenToSquare,
   FaRegRectangleList,
   FaRegRectangleXmark,
@@ -27,6 +28,7 @@ import ReviewModal from "../../components/dashboard/review/ReviewModal";
 import ApplicationFormModal from "../../components/ApplicationFormModal";
 import CommonInput from "../../components/form/CommonInput";
 import { useForm } from "react-hook-form";
+import FeedBackModal from "../../components/dashboard/feedback/FeedBackModal";
 
 const AdminApplications = () => {
   const { user } = useAuth();
@@ -36,8 +38,6 @@ const AdminApplications = () => {
     {},
     true
   );
-  console.log(data);
-
   const { register, setValue } = useForm();
 
   const [modalData, setModalData] = useState({});
@@ -49,9 +49,8 @@ const AdminApplications = () => {
   }, [modalData]);
 
   const queryClient = useQueryClient();
-  const [reviewId, setReviewId] = useState("");
   const [deleteModal, setDeleteModal] = useState(false);
-  const [reviewModal, setReviewModal] = useState(false);
+  const [feedbackModal, setFeedbackModal] = useState(false);
   const [detailsModal, setDetailsModal] = useState(false);
   const [cancelApplication, setCancelApplication] = useState(null);
 
@@ -132,10 +131,13 @@ const AdminApplications = () => {
                         Details
                       </Dropdown.Item>
                       <Dropdown.Item
-                        icon={FaPenToSquare}
-                        // onClick={() => handleEdit(d)}
+                        icon={FaFileCircleExclamation}
+                        onClick={() => {
+                          setModalData(d);
+                          setFeedbackModal(true);
+                        }}
                       >
-                        Edit
+                        Feedback
                       </Dropdown.Item>
                       <Dropdown.Item
                         className="text-red-400 dark:text-red-600"
@@ -213,6 +215,16 @@ const AdminApplications = () => {
             </div>
           </Modal.Body>
         </Modal>
+      )}
+
+      {/* modal: feedback modal */}
+      {feedbackModal && (
+        <FeedBackModal
+          modalState={feedbackModal}
+          toggleModalState={setFeedbackModal}
+          applicantId={modalData._id}
+          defaultValue={modalData.feedback || ""}
+        />
       )}
     </DashboardContainer>
   );
