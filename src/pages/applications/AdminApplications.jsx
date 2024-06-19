@@ -1,46 +1,64 @@
-import { Alert, Modal } from "flowbite-react";
-import { Helmet } from "react-helmet-async";
-import { HiInformationCircle } from "react-icons/hi";
-
-import useAuth from "../../hooks/useAuth";
-import useFetchData from "../../hooks/useFetchData";
-import MyApplicationTable from "./MyApplicationTable";
-import MySpinner from "../../components/shared/MySpinner";
-import SectionHeading from "../../components/shared/SectionHeading";
-import DashboardContainer from "../../components/dashboard/shared/DashboardContainer";
-
 import {
   FaEllipsisVertical,
   FaFileCircleExclamation,
-  FaPenToSquare,
   FaRegRectangleList,
   FaRegRectangleXmark,
 } from "react-icons/fa6";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
-import { Button, Dropdown, Table } from "flowbite-react";
-
-import usePostData from "../../hooks/usePostData";
-import PopUpModal from "../../components/PopUpModal";
-import { useQueryClient } from "@tanstack/react-query";
-import ReviewModal from "../../components/dashboard/review/ReviewModal";
-import ApplicationFormModal from "../../components/ApplicationFormModal";
-import CommonInput from "../../components/form/CommonInput";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
+import { HiInformationCircle } from "react-icons/hi";
+import { useQueryClient } from "@tanstack/react-query";
+import { Dropdown, Table, Alert, Modal } from "flowbite-react";
+
+import useAuth from "../../hooks/useAuth";
+import usePostData from "../../hooks/usePostData";
+import useFetchData from "../../hooks/useFetchData";
+import PopUpModal from "../../components/PopUpModal";
+import MySpinner from "../../components/shared/MySpinner";
+import CommonInput from "../../components/form/CommonInput";
+import SectionHeading from "../../components/shared/SectionHeading";
 import FeedBackModal from "../../components/dashboard/feedback/FeedBackModal";
+import DashboardContainer from "../../components/dashboard/shared/DashboardContainer";
 
 const AdminApplications = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const { register, setValue } = useForm();
+  const [modalData, setModalData] = useState({});
+  const [rejectModal, setRejectModal] = useState(false);
+  const [detailsModal, setDetailsModal] = useState(false);
+  const [feedbackModal, setFeedbackModal] = useState(false);
+
   const { data, isLoading } = useFetchData(
     "allApplications",
     `appliedScholarships?uid=${user?.uid}`,
     {},
     true
   );
-  const { register, setValue } = useForm();
 
-  const [modalData, setModalData] = useState({});
+  const { mutateAsync: rejectScholarshipMutation } = usePostData();
+
+  const handleReject = async (id) => {
+    const obj = {
+      method: "patch",
+      url: `appliedScholarships/reject/${id}?uid=${user?.uid}`,
+    };
+    try {
+      const resDB = await rejectScholarshipMutation(obj);
+      //   console.log(resDB.data);
+      if (resDB.data?.modifiedCount) {
+        queryClient.invalidateQueries(["allApplications, myApplications"]);
+        setRejectModal(false);
+        toast.success("Application rejected");
+      }
+    } catch (error) {
+      // console.log(error);
+      toast.error("Failed! Try again.");
+    }
+  };
+
   useEffect(() => {
     setValue("name", modalData.applicantName);
     setValue("university", modalData.additionalDetails?.universityName);
@@ -48,13 +66,6 @@ const AdminApplications = () => {
     setValue("scholarship", modalData.additionalDetails?.scholarshipCategory);
   }, [modalData]);
 
-  const queryClient = useQueryClient();
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [feedbackModal, setFeedbackModal] = useState(false);
-  const [detailsModal, setDetailsModal] = useState(false);
-  const [cancelApplication, setCancelApplication] = useState(null);
-
-  const { mutateAsync: cancelScholarshipMutation } = usePostData();
   return (
     <DashboardContainer>
       <Helmet>
@@ -142,9 +153,10 @@ const AdminApplications = () => {
                       <Dropdown.Item
                         className="text-red-400 dark:text-red-600"
                         icon={FaRegRectangleXmark}
+                        disabled={d.status === "Rejected" ? true : false}
                         onClick={() => {
-                          setCancelApplication(d._id);
-                          setDeleteModal(true);
+                          setModalData(d._id);
+                          setRejectModal(true);
                         }}
                       >
                         Cancel
@@ -224,6 +236,15 @@ const AdminApplications = () => {
           toggleModalState={setFeedbackModal}
           applicantId={modalData._id}
           defaultValue={modalData.feedback || ""}
+        />
+      )}
+
+      {/* modal: confirmation before reject application */}
+      {rejectModal && (
+        <PopUpModal
+          modalState={rejectModal}
+          toggleModal={setRejectModal}
+          onClick={() => handleReject(modalData)}
         />
       )}
     </DashboardContainer>
