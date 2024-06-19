@@ -45,7 +45,7 @@ const MyApplicationTable = ({ data }) => {
       const resDB = await cancelScholarshipMutation(object);
       if (resDB.data?.modifiedCount) {
         setDeleteModal(false);
-        queryClient.invalidateQueries(["myApplications"]);
+        queryClient.invalidateQueries(["myApplications, allApplications"]);
         return toast.success("Application cancelled");
       }
     } catch (error) {
@@ -83,14 +83,14 @@ const MyApplicationTable = ({ data }) => {
               className="bg-white dark:border-gray-700 dark:bg-gray-800"
             >
               <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                {d.universityName}
+                {d.additionalDetails.universityName}
               </Table.Cell>
               <Table.Cell>
                 {d.additionalDetails.universityCity}, <br />{" "}
                 {d.additionalDetails.universityCountry}
               </Table.Cell>
               <Table.Cell>{d.feedback || "None"}</Table.Cell>
-              <Table.Cell>{d.subjectCategory}</Table.Cell>
+              <Table.Cell>{d.additionalDetails.subjectCategory}</Table.Cell>
               <Table.Cell>{d.applicantDegree}</Table.Cell>
               <Table.Cell>{d.additionalDetails.applicationFee}$</Table.Cell>
               <Table.Cell>{d.additionalDetails.serviceCharge}$</Table.Cell>

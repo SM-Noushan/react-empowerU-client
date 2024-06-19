@@ -98,7 +98,7 @@ const ApplicationFormModal = ({
           setLoading(false);
           setOpenModal(false);
           reset();
-          queryClient.invalidateQueries(["myApplications"]);
+          queryClient.invalidateQueries(["myApplications, allApplications"]);
           toast.success("Successfully Updated");
         }
       } catch (error) {
@@ -118,6 +118,9 @@ const ApplicationFormModal = ({
           const scholarshipId = _id;
           const applyDate = new moment().format("DD MMMM, YYYY");
           if (studyGap === "default") data.studyGap = "No";
+          delete data.scholarshipCategory;
+          delete data.subjectCategory;
+          delete data.universityName;
           const newData = {
             ...data,
             userUID,
@@ -139,7 +142,7 @@ const ApplicationFormModal = ({
             setOpenModal(false);
             setPayStatus(false);
             reset();
-            queryClient.invalidateQueries(["myApplications"]);
+            queryClient.invalidateQueries(["myApplications, allApplications"]);
             toast.success("Successfully Applied");
             return navigate("/dashboard/applications");
           }

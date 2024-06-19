@@ -65,6 +65,15 @@ const ManageScholarships = () => {
           modifiedData.applicationDeadline
         ).format("DD MMMM, YYYY");
 
+      if (modifiedData.universityWorldRank)
+        modifiedData.universityWorldRank = parseInt(
+          modifiedData.universityWorldRank
+        );
+      if (modifiedData.applicationFee)
+        modifiedData.applicationFee = parseFloat(modifiedData.applicationFee);
+      if (modifiedData.serviceCharge)
+        modifiedData.serviceCharge = parseFloat(modifiedData.serviceCharge);
+
       if (modifiedData.universityLogo) {
         const res = await uploadImage(modifiedData.universityLogo);
         if (res.data.success)
@@ -81,7 +90,9 @@ const ManageScholarships = () => {
         toast.warn("No changes were made");
       }
       if (resDB.data?.modifiedCount) {
-        queryClient.invalidateQueries(["scholarships, myApplications"]);
+        queryClient.invalidateQueries([
+          "scholarships, myApplications, allApplications",
+        ]);
         setEditModal(false);
         reset();
         toast.success("Successfully Updated");
@@ -103,7 +114,9 @@ const ManageScholarships = () => {
       if (resDB.data?.deletedCount) {
         setDeleteId("");
         setDeleteModal(false);
-        queryClient.invalidateQueries(["scholarships, myApplications"]);
+        queryClient.invalidateQueries([
+          "scholarships, myApplications, allApplications",
+        ]);
         return toast.success("Deleted Successfully");
       }
     } catch (error) {

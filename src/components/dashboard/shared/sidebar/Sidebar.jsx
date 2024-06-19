@@ -70,22 +70,22 @@ const adminSideBarItem = [
     icon: <FaGraduationCap size={20} />,
   },
   {
-    link: "/dashboard/scholarships",
+    link: "/dashboard/scholarships/manage",
     label: "Manage",
     icon: <FaUserGraduate size={20} />,
   },
   {
-    link: "/dashboard/applications",
+    link: "/dashboard/applications/manage",
     label: "Applications",
     icon: <FaBookOpenReader size={20} />,
   },
   {
-    link: "/dashboard/users",
+    link: "/dashboard/users/manage",
     label: "Users",
     icon: <FaUsers size={20} />,
   },
   {
-    link: "/dashboard/reviews",
+    link: "/dashboard/reviews/manage",
     label: "Reviews",
     icon: <FaRegStarHalfStroke size={20} />,
   },
