@@ -1,15 +1,22 @@
-import PropTypes from "prop-types";
-import CommonInput from "../form/CommonInput";
-import DatePicker from "../form/DatePicker";
 import { Controller } from "react-hook-form";
 import { Datepicker } from "flowbite-react";
+import PropTypes from "prop-types";
 import moment from "moment";
-import SelectInput from "../form/SelectInput";
-import validateImage from "../../utils/validateImage";
-import FileInput from "../form/FileInput";
-import TextAreaInput from "../form/TextAreaInput";
 
-const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
+import FileInput from "../form/FileInput";
+import DatePicker from "../form/DatePicker";
+import CommonInput from "../form/CommonInput";
+import SelectInput from "../form/SelectInput";
+import TextAreaInput from "../form/TextAreaInput";
+import validateImage from "../../utils/validateImage";
+
+const ScholarshipDetailsInputFields = ({
+  register,
+  errors,
+  control,
+  edit = false,
+  deadline = new Date(),
+}) => {
   return (
     <>
       {/* scholarship name */}
@@ -142,14 +149,23 @@ const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
         error={errors?.degree?.message}
       />
 
-      <div className="flex flex-col-reverse md:flex-row md:items-center gap-4 *:flex-1">
+      <div
+        className={
+          edit
+            ? "flex flex-col-reverse gap-y-2"
+            : "flex flex-col-reverse md:flex-row md:items-center gap-4 *:flex-1"
+        }
+      >
         {/* university logo */}
         <FileInput
           label="University Logo"
-          {...register("universityLogo", {
-            required: "Required",
-            validate: validateImage,
-          })}
+          {...register(
+            "universityLogo",
+            !edit && {
+              required: "Required",
+              validate: validateImage,
+            }
+          )}
           error={errors?.universityLogo?.message}
         />
         {/* application deadline */}
@@ -163,6 +179,7 @@ const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
             control={control}
             rules={{
               validate: (value) => {
+                if (edit) return true;
                 if (!value) {
                   return "Date is required";
                 }
@@ -183,6 +200,7 @@ const ScholarshipDetailsInputFields = ({ register, errors, control }) => {
             render={({ field: { onChange, value } }) => (
               <Datepicker
                 minDate={new Date()}
+                defaultDate={deadline}
                 title="Application Deadline"
                 selected={value}
                 onSelectedDateChanged={(date) => {
@@ -214,6 +232,8 @@ ScholarshipDetailsInputFields.propTypes = {
   register: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
   control: PropTypes.object.isRequired,
+  deadline: PropTypes.object,
+  edit: PropTypes.bool,
 };
 
 export default ScholarshipDetailsInputFields;
