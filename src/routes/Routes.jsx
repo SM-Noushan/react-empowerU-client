@@ -14,6 +14,7 @@ import MyApplications from "../pages/applications/MyApplications";
 import AllScholarship from "../pages/all-scholarship/AllScholarship";
 import AddScholarship from "../pages/add-scholarships/AddScholarship";
 import ScholarshipDetails from "../pages/scholarship-details/ScholarshipDetails";
+import ManageScholarships from "../pages/manage-scholarships/ManageScholarships";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +78,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminOrModRoute role="adminAndMod">
             <AddScholarship />
+          </AdminOrModRoute>
+        ),
+      },
+      {
+        path: "scholarships",
+        element: (
+          <AdminOrModRoute role="adminAndMod">
+            <ManageScholarships />
           </AdminOrModRoute>
         ),
       },

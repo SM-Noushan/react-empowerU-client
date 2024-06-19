@@ -6,10 +6,10 @@ import {
   FaRegRectangleXmark,
 } from "react-icons/fa6";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { Button, Dropdown, Table } from "flowbite-react";
 
-import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import usePostData from "../../hooks/usePostData";
 import PopUpModal from "../../components/PopUpModal";
