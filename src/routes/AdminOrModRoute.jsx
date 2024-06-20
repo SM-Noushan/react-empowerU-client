@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
-
 import ProtoTypes from "prop-types";
+
 import useAuth from "../hooks/useAuth";
 import useAdmin from "../hooks/useAdmin";
 import useModerator from "../hooks/useModerator";
@@ -15,15 +15,16 @@ const AdminOrModRoute = ({ children, role }) => {
 
   if (loading || isAdminLoading || isModLoading) return <MySpinner />;
 
-  if (role === "adminAndMod")
-    if (user && (isMod?.role || isAdmin?.role)) return children;
-  if (role === "admin") if (user && isAdmin?.role) return children;
-  if (role === "mod") if (user && isMod?.role) return children;
+  if (role === "adminAndMod" && user && (isMod?.role || isAdmin?.role))
+    return children;
+  if (role === "admin" && user && isAdmin?.role) return children;
+  if (role === "mod" && user && isMod?.role) return children;
 
-  if (user) return navigate(-1);
-  return navigate("/signin", {
-    state: { from: location },
-  });
+  if (user) return navigate("/");
+  else
+    return navigate("/signin", {
+      state: { from: location },
+    });
 };
 
 AdminOrModRoute.propTypes = {

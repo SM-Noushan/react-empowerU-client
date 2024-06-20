@@ -22,7 +22,7 @@ const MyApplications = () => {
       <Helmet>
         <title>EmpowerU: My Applications</title>
       </Helmet>
-      <div className="overflow-x-auto w-full">
+      <div className="max-h-[calc(100dvh-100px)]">
         <SectionHeading heading="My Applications" />
         {isLoading ? (
           <MySpinner />

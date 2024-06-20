@@ -136,7 +136,7 @@ const ManageScholarships = () => {
       <Helmet>
         <title>EmpowerU: Manage Scholarships</title>
       </Helmet>
-      <div className="overflow-x-auto w-full">
+      <div className="max-h-[calc(100dvh-100px)]">
         <SectionHeading heading="Manage Scholarships" />
         {isLoading ? (
           <MySpinner />
@@ -150,87 +150,89 @@ const ManageScholarships = () => {
             <span className="font-medium">Info!</span> No Scholarships Found.
           </Alert>
         ) : (
-          <Table striped>
-            <Table.Head>
-              <Table.HeadCell>
-                <span className="sr-only">Logo</span>
-              </Table.HeadCell>
-              <Table.HeadCell>Scholarship</Table.HeadCell>
-              <Table.HeadCell>University</Table.HeadCell>
-              <Table.HeadCell>Subject</Table.HeadCell>
-              <Table.HeadCell>Degree</Table.HeadCell>
-              <Table.HeadCell>Fees</Table.HeadCell>
-              <Table.HeadCell>
-                Service <br /> Charge
-              </Table.HeadCell>
-              <Table.HeadCell>Deadline</Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">Edit</span>
-              </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {data.map((d) => (
-                <Table.Row
-                  key={d._id}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <Table.Cell className="p-0">
-                    <img
-                      src={d.universityLogo}
-                      alt="university-logo"
-                      className="size-16 rounded-lg object-contain"
-                    />
-                  </Table.Cell>
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {d.scholarshipName}
-                  </Table.Cell>
-                  <Table.Cell>{d.universityName}</Table.Cell>
-                  <Table.Cell>{d.subjectCategory}</Table.Cell>
-                  <Table.Cell>{d.degree}</Table.Cell>
-                  <Table.Cell>{d.applicationFee}$</Table.Cell>
-                  <Table.Cell>{d.serviceCharge}$</Table.Cell>
-                  <Table.Cell>{d.applicationDeadline}</Table.Cell>
-                  <Table.Cell className="*:cursor-pointer">
-                    <Dropdown
-                      dismissOnClick={false}
-                      renderTrigger={() => (
-                        <span>
-                          <FaEllipsisVertical />
-                        </span>
-                      )}
-                    >
-                      <Dropdown.Item
-                        icon={FaRegRectangleList}
-                        as={Link}
-                        to={`/scholarship/${d._id}`}
+          <div className="">
+            <Table striped>
+              <Table.Head>
+                <Table.HeadCell>
+                  <span className="sr-only">Logo</span>
+                </Table.HeadCell>
+                <Table.HeadCell>Scholarship</Table.HeadCell>
+                <Table.HeadCell>University</Table.HeadCell>
+                <Table.HeadCell>Subject</Table.HeadCell>
+                <Table.HeadCell>Degree</Table.HeadCell>
+                <Table.HeadCell>Fees</Table.HeadCell>
+                <Table.HeadCell>
+                  Service <br /> Charge
+                </Table.HeadCell>
+                <Table.HeadCell>Deadline</Table.HeadCell>
+                <Table.HeadCell>
+                  <span className="sr-only">Edit</span>
+                </Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                {data.map((d) => (
+                  <Table.Row
+                    key={d._id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <Table.Cell className="p-0 pl-2.5">
+                      <img
+                        src={d.universityLogo}
+                        alt="university-logo"
+                        className="size-16 rounded-lg object-contain"
+                      />
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {d.scholarshipName}
+                    </Table.Cell>
+                    <Table.Cell>{d.universityName}</Table.Cell>
+                    <Table.Cell>{d.subjectCategory}</Table.Cell>
+                    <Table.Cell>{d.degree}</Table.Cell>
+                    <Table.Cell>{d.applicationFee}$</Table.Cell>
+                    <Table.Cell>{d.serviceCharge}$</Table.Cell>
+                    <Table.Cell>{d.applicationDeadline}</Table.Cell>
+                    <Table.Cell className="*:cursor-pointer">
+                      <Dropdown
+                        dismissOnClick={false}
+                        renderTrigger={() => (
+                          <span>
+                            <FaEllipsisVertical />
+                          </span>
+                        )}
                       >
-                        Details
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        icon={FaPenToSquare}
-                        onClick={() => {
-                          setEditData(d);
-                          setEditModal(true);
-                        }}
-                      >
-                        Edit
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        className="text-red-400 dark:text-red-600"
-                        icon={FaRegRectangleXmark}
-                        onClick={() => {
-                          setDeleteId(d._id);
-                          setDeleteModal(true);
-                        }}
-                      >
-                        Delete
-                      </Dropdown.Item>
-                    </Dropdown>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
+                        <Dropdown.Item
+                          icon={FaRegRectangleList}
+                          as={Link}
+                          to={`/scholarship/${d._id}`}
+                        >
+                          Details
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          icon={FaPenToSquare}
+                          onClick={() => {
+                            setEditData(d);
+                            setEditModal(true);
+                          }}
+                        >
+                          Edit
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          className="text-red-400 dark:text-red-600"
+                          icon={FaRegRectangleXmark}
+                          onClick={() => {
+                            setDeleteId(d._id);
+                            setDeleteModal(true);
+                          }}
+                        >
+                          Delete
+                        </Dropdown.Item>
+                      </Dropdown>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </div>
         )}
       </div>
 

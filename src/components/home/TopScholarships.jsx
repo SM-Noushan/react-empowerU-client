@@ -1,12 +1,18 @@
-import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Link } from "react-router-dom";
 
 import ScholarshipCard from "../ScholarshipCard";
 import NavigationButton from "../NavigationButton";
+import useFetchData from "../../hooks/useFetchData";
+import SkeletonCard from "../skeleton/SkeletonCard";
 import SectionHeading from "../shared/SectionHeading";
-import { Link } from "react-router-dom";
 
 const TopScholarships = () => {
+  const { data, isLoading } = useFetchData(
+    "topScholarships",
+    "scholarships/top"
+  );
   return (
     <section className="bg-white dark:bg-gray-900 relative">
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
@@ -35,24 +41,25 @@ const TopScholarships = () => {
               },
             }}
           >
-            <SwiperSlide>
-              <ScholarshipCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ScholarshipCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ScholarshipCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ScholarshipCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ScholarshipCard />
-            </SwiperSlide>
-            <SwiperSlide>
-              <ScholarshipCard />
-            </SwiperSlide>
+            {isLoading ? (
+              <>
+                <SwiperSlide>
+                  <SkeletonCard />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <SkeletonCard />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <SkeletonCard />
+                </SwiperSlide>
+              </>
+            ) : (
+              data.map((data) => (
+                <SwiperSlide key={data._id}>
+                  <ScholarshipCard data={data} />
+                </SwiperSlide>
+              ))
+            )}
           </Swiper>
         </div>
       </div>

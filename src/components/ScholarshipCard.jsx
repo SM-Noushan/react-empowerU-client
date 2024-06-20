@@ -43,7 +43,7 @@ const ScholarshipCard = ({ data }) => {
         </div>
       </div>
       <div className="px-5 py-5 text-gray-900 dark:text-white">
-        <h5 className="text-2xl font-semibold tracking-tight">
+        <h5 className="text-2xl font-semibold tracking-tight h-24">
           {scholarshipName} <br />
           <span className="text-sm lg:text-base font-medium">
             By {universityName}

@@ -60,7 +60,7 @@ const MyReviews = () => {
       <Helmet>
         <title>EmpowerU: My Reviews</title>
       </Helmet>
-      <div className="overflow-x-auto w-full">
+      <div className="max-h-[calc(100dvh-100px)]">
         <SectionHeading heading="My Reviews" />
         {isLoading ? (
           <MySpinner />

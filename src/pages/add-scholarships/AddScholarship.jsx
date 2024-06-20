@@ -65,7 +65,7 @@ const AddScholarship = () => {
     return setLoading(false);
   };
   return (
-    <section className="">
+    <section>
       <Helmet>
         <title>EmpowerU: Add Scholarship</title>
       </Helmet>

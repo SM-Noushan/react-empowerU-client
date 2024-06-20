@@ -71,7 +71,7 @@ const ManageUsers = () => {
       <Helmet>
         <title>EmpowerU: Manage Users</title>
       </Helmet>
-      <div className="overflow-x-auto w-full">
+      <div className="max-h-[calc(100dvh-100px)]">
         <SectionHeading heading="Manage Users" />
         {isLoading ? (
           <MySpinner />

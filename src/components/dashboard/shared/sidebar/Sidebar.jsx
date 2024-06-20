@@ -48,12 +48,22 @@ const modSideBarItem = [
     icon: <FaClipboardUser size={20} />,
   },
   {
-    link: "/dashboard/applications",
-    label: "Applications",
-    icon: <FaRegPenToSquare size={20} />,
+    link: "/dashboard/scholarship/add",
+    label: "Scholarship",
+    icon: <FaGraduationCap size={20} />,
   },
   {
-    link: "/dashboard/reviews",
+    link: "/dashboard/scholarships/manage",
+    label: "Manage",
+    icon: <FaUserGraduate size={20} />,
+  },
+  {
+    link: "/dashboard/applications/manage",
+    label: "Applications",
+    icon: <FaBookOpenReader size={20} />,
+  },
+  {
+    link: "/dashboard/reviews/manage",
     label: "Reviews",
     icon: <FaRegStarHalfStroke size={20} />,
   },
