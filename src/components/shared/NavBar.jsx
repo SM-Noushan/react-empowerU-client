@@ -37,7 +37,7 @@ const NavBar = () => {
           </span>
         </Link>
         {/* search */}
-        <form className="hidden lg:block max-w-md mx-auto flex-1">
+        <div className="hidden lg:block max-w-md mx-auto flex-1">
           <label
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -75,7 +75,7 @@ const NavBar = () => {
               Search
             </button>
           </div>
-        </form>
+        </div>
         <div className="flex items-center justify-end">
           <Flowbite>
             <DarkThemeToggle className="*:size-8 focus:ring-0" />

@@ -1,4 +1,5 @@
 import Banner from "../../components/home/Banner";
+import ContactUs from "../../components/home/ContactUs";
 import StudentReview from "../../components/home/StudentReview";
 import TopScholarships from "../../components/home/TopScholarships";
 
@@ -13,6 +14,7 @@ const Home = () => {
       <Banner />
       <TopScholarships />
       <StudentReview />
+      <ContactUs />
     </>
   );
 };
