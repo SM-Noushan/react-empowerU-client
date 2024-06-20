@@ -11,6 +11,7 @@ import CheckOut from "../pages/checkout/CheckOut";
 import ManageUsers from "../pages/users/ManageUsers";
 import MyProfile from "../pages/my-profile/MyProfile";
 import MyReviews from "../pages/my-reviews/MyReviews";
+import Statistics from "../pages/satistics/Statistics";
 import ManageReviews from "../pages/my-reviews/ManageReviews";
 import MyApplications from "../pages/applications/MyApplications";
 import AllScholarship from "../pages/all-scholarship/AllScholarship";
@@ -115,6 +116,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminOrModRoute role="adminAndMod">
             <ManageReviews />
+          </AdminOrModRoute>
+        ),
+      },
+      {
+        path: "statistics",
+        element: (
+          <AdminOrModRoute role="admin">
+            <Statistics />
           </AdminOrModRoute>
         ),
       },

@@ -12,6 +12,7 @@ import {
   FaRegPenToSquare,
   FaRegStarHalfStroke,
   FaArrowRightToBracket,
+  FaCoins,
 } from "react-icons/fa6";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -98,6 +99,11 @@ const adminSideBarItem = [
     link: "/dashboard/reviews/manage",
     label: "Reviews",
     icon: <FaRegStarHalfStroke size={20} />,
+  },
+  {
+    link: "/dashboard/statistics",
+    label: "Statistics",
+    icon: <FaCoins size={20} />,
   },
 ];
 

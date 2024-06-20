@@ -146,7 +146,7 @@ const ManageScholarships = () => {
       <Helmet>
         <title>EmpowerU: Manage Scholarships</title>
       </Helmet>
-      <div className="max-h-[calc(100dvh-100px)]">
+      <div className={`max-h-[calc(100dvh-100px)] ${data?.length || "w-full"}`}>
         <SectionHeading heading="Manage Scholarships" />
         {isLoading ? (
           <MySpinner />

@@ -20,7 +20,7 @@ const TopScholarships = () => {
         <div className="">
           <Swiper
             autoplay={{ delay: 3000 }}
-            loop={true}
+            loop={isLoading ? false : data.length > 1 ? true : false}
             navigation={{
               nextEl: ".nextSlideTopScholarship",
               prevEl: ".prevSlideTopScholarship",

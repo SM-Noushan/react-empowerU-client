@@ -72,7 +72,7 @@ const AdminApplications = () => {
       <Helmet>
         <title>EmpowerU: Manage Applications</title>
       </Helmet>
-      <div className="max-h-[calc(100dvh-100px)]">
+      <div className={`max-h-[calc(100dvh-100px)] ${data?.length || "w-full"}`}>
         <SectionHeading heading="Manage Applications" />
         {isLoading ? (
           <MySpinner />
