@@ -8,16 +8,6 @@ const SelectInput = forwardRef(function FileInput(
 ) {
   return (
     <div className="relative">
-      {/* <label
-        className={`sr-only block mb-2 text-sm font-medium ${
-          error
-            ? "text-red-600 dark:text-red-500"
-            : "text-gray-500 dark:text-gray-400 peer-focus:text-primary-600 peer-focus:dark:text-primary-500"
-        }`}
-        htmlFor={name}
-      >
-        {label}
-      </label> */}
       <select
         name={name}
         id={name}
@@ -35,9 +25,9 @@ const SelectInput = forwardRef(function FileInput(
         <option value="default" disabled>
           -- Select --
         </option>
-        {options.map((op, idx) => (
-          <option key={idx} value={op}>
-            {op}
+        {options.map((option, idx) => (
+          <option key={idx} value={option}>
+            {option}
           </option>
         ))}
       </select>
