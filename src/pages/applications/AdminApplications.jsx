@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { HiInformationCircle } from "react-icons/hi";
 import { useQueryClient } from "@tanstack/react-query";
-import { Dropdown, Table, Alert, Modal } from "flowbite-react";
+import { Dropdown, Table, Alert, Modal, Select } from "flowbite-react";
 
 import useAuth from "../../hooks/useAuth";
 import usePostData from "../../hooks/usePostData";
@@ -27,14 +27,15 @@ const AdminApplications = () => {
   const queryClient = useQueryClient();
   const { register, setValue } = useForm();
   const [modalData, setModalData] = useState({});
+  const [sortBy, setSortBy] = useState("df");
   const [rejectModal, setRejectModal] = useState(false);
   const [detailsModal, setDetailsModal] = useState(false);
   const [feedbackModal, setFeedbackModal] = useState(false);
 
   const { data, isLoading } = useFetchData(
     "allApplications",
-    `appliedScholarships?uid=${user?.uid}`,
-    {},
+    `appliedScholarships?uid=${user?.uid}&sort=${sortBy}`,
+    { sortBy },
     true
   );
 
@@ -85,88 +86,115 @@ const AdminApplications = () => {
             <span className="font-medium">Info!</span> No Application Found.
           </Alert>
         ) : (
-          <Table striped>
-            <Table.Head>
-              <Table.HeadCell>University</Table.HeadCell>
-              <Table.HeadCell>Scholarship</Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-              <Table.HeadCell>Subject</Table.HeadCell>
-              <Table.HeadCell>
-                Applied <br /> Degree
-              </Table.HeadCell>
-              <Table.HeadCell>Fees</Table.HeadCell>
-              <Table.HeadCell>
-                Service <br /> Charge
-              </Table.HeadCell>
-              <Table.HeadCell>Status</Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">Edit</span>
-              </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {data.map((d) => (
-                <Table.Row
-                  key={d._id}
-                  className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                >
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {d.additionalDetails.universityName}
-                  </Table.Cell>
-                  <Table.Cell>{d.additionalDetails.scholarshipName}</Table.Cell>
-                  <Table.Cell>
-                    {d.additionalDetails.scholarshipCategory}
-                  </Table.Cell>
-                  <Table.Cell>{d.additionalDetails.subjectCategory}</Table.Cell>
-                  <Table.Cell>{d.applicantDegree}</Table.Cell>
-                  <Table.Cell>{d.additionalDetails.applicationFee}$</Table.Cell>
-                  <Table.Cell>{d.additionalDetails.serviceCharge}$</Table.Cell>
-                  <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                    {d.status || "Pending"}
-                  </Table.Cell>
-                  <Table.Cell className="*:cursor-pointer">
-                    <Dropdown
-                      dismissOnClick={false}
-                      renderTrigger={() => (
-                        <span>
-                          <FaEllipsisVertical />
-                        </span>
-                      )}
-                    >
-                      <Dropdown.Item
-                        icon={FaRegRectangleList}
-                        onClick={() => {
-                          setModalData(d);
-                          setDetailsModal(true);
-                        }}
+          <>
+            <div className="w-72 mx-auto flex items-center justify-between gap-x-2">
+              <h1 className="text-xl font-semibold inline-block min-w-24">
+                Sort By
+              </h1>
+              <Select
+                onChange={(e) => {
+                  setSortBy(e.target.value);
+                }}
+                defaultValue={sortBy}
+              >
+                <option value="df">Default</option>
+                <option value="asc_ad">Applied Date (Ascending)</option>
+                <option value="des_ad">Applied Date (Descending)</option>
+                <option value="asc_dl">Deadline (Ascending)</option>
+                <option value="des_dl">Deadline (Descending)</option>
+              </Select>
+            </div>
+            <Table striped>
+              <Table.Head>
+                <Table.HeadCell>University</Table.HeadCell>
+                <Table.HeadCell>Scholarship</Table.HeadCell>
+                <Table.HeadCell>Category</Table.HeadCell>
+                <Table.HeadCell>Subject</Table.HeadCell>
+                <Table.HeadCell>
+                  Applied <br /> Degree
+                </Table.HeadCell>
+                <Table.HeadCell>Fees</Table.HeadCell>
+                <Table.HeadCell>
+                  Service <br /> Charge
+                </Table.HeadCell>
+                <Table.HeadCell>Status</Table.HeadCell>
+                <Table.HeadCell>
+                  <span className="sr-only">Edit</span>
+                </Table.HeadCell>
+              </Table.Head>
+              <Table.Body className="divide-y">
+                {data.map((d) => (
+                  <Table.Row
+                    key={d._id}
+                    className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                  >
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {d.additionalDetails.universityName}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {d.additionalDetails.scholarshipName}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {d.additionalDetails.scholarshipCategory}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {d.additionalDetails.subjectCategory}
+                    </Table.Cell>
+                    <Table.Cell>{d.applicantDegree}</Table.Cell>
+                    <Table.Cell>
+                      {d.additionalDetails.applicationFee}$
+                    </Table.Cell>
+                    <Table.Cell>
+                      {d.additionalDetails.serviceCharge}$
+                    </Table.Cell>
+                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                      {d.status || "Pending"}
+                    </Table.Cell>
+                    <Table.Cell className="*:cursor-pointer">
+                      <Dropdown
+                        dismissOnClick={false}
+                        renderTrigger={() => (
+                          <span>
+                            <FaEllipsisVertical />
+                          </span>
+                        )}
                       >
-                        Details
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        icon={FaFileCircleExclamation}
-                        onClick={() => {
-                          setModalData(d);
-                          setFeedbackModal(true);
-                        }}
-                      >
-                        Feedback
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        className="text-red-400 dark:text-red-600"
-                        icon={FaRegRectangleXmark}
-                        disabled={d.status === "Rejected" ? true : false}
-                        onClick={() => {
-                          setModalData(d._id);
-                          setRejectModal(true);
-                        }}
-                      >
-                        Cancel
-                      </Dropdown.Item>
-                    </Dropdown>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
+                        <Dropdown.Item
+                          icon={FaRegRectangleList}
+                          onClick={() => {
+                            setModalData(d);
+                            setDetailsModal(true);
+                          }}
+                        >
+                          Details
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          icon={FaFileCircleExclamation}
+                          onClick={() => {
+                            setModalData(d);
+                            setFeedbackModal(true);
+                          }}
+                        >
+                          Feedback
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          className="text-red-400 dark:text-red-600"
+                          icon={FaRegRectangleXmark}
+                          disabled={d.status === "Rejected" ? true : false}
+                          onClick={() => {
+                            setModalData(d._id);
+                            setRejectModal(true);
+                          }}
+                        >
+                          Cancel
+                        </Dropdown.Item>
+                      </Dropdown>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </>
         )}
       </div>
       {/* modal: view applicants details */}
