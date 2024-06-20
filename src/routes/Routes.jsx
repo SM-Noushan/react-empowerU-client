@@ -8,15 +8,16 @@ import Error from "../components/shared/Error";
 import AdminOrModRoute from "./AdminOrModRoute";
 import PrivateRoute from "../routes/PrivateRoute";
 import CheckOut from "../pages/checkout/CheckOut";
+import ManageUsers from "../pages/users/ManageUsers";
 import MyProfile from "../pages/my-profile/MyProfile";
 import MyReviews from "../pages/my-reviews/MyReviews";
+import ManageReviews from "../pages/my-reviews/ManageReviews";
 import MyApplications from "../pages/applications/MyApplications";
 import AllScholarship from "../pages/all-scholarship/AllScholarship";
 import AddScholarship from "../pages/add-scholarships/AddScholarship";
+import AdminApplications from "../pages/applications/AdminApplications";
 import ScholarshipDetails from "../pages/scholarship-details/ScholarshipDetails";
 import ManageScholarships from "../pages/manage-scholarships/ManageScholarships";
-import AdminApplications from "../pages/applications/AdminApplications";
-import ManageReviews from "../pages/my-reviews/ManageReviews";
 
 export const router = createBrowserRouter([
   {
@@ -96,6 +97,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminOrModRoute role="adminAndMod">
             <AdminApplications />
+          </AdminOrModRoute>
+        ),
+      },
+      {
+        path: "users/manage",
+        element: (
+          <AdminOrModRoute role="admin">
+            <ManageUsers />
           </AdminOrModRoute>
         ),
       },
