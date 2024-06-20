@@ -1,4 +1,5 @@
 import Banner from "../../components/home/Banner";
+import StudentReview from "../../components/home/StudentReview";
 import TopScholarships from "../../components/home/TopScholarships";
 
 import { Helmet } from "react-helmet-async";
@@ -11,6 +12,7 @@ const Home = () => {
       </Helmet>
       <Banner />
       <TopScholarships />
+      <StudentReview />
     </>
   );
 };

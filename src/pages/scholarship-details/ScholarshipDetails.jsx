@@ -2,6 +2,7 @@ import { Blockquote, Rating } from "flowbite-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Link, useLoaderData } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import {
   FaBook,
   FaBookmark,
@@ -10,11 +11,11 @@ import {
   FaMoneyCheck,
 } from "react-icons/fa6";
 
+import useAuth from "../../hooks/useAuth";
+import useFetchData from "../../hooks/useFetchData";
 import Container2 from "../../components/shared/Container2";
 import NavigationButton from "../../components/NavigationButton";
 import Review from "../../components/scholarship-details/Review";
-import useAuth from "../../hooks/useAuth";
-import useFetchData from "../../hooks/useFetchData";
 
 const ScholarshipDetails = () => {
   const { user } = useAuth();
@@ -48,6 +49,9 @@ const ScholarshipDetails = () => {
 
   return (
     <Container2>
+      <Helmet>
+        <title>EmpowerU: {scholarshipName || "Details"}</title>
+      </Helmet>
       <div className="max-w-screen-xl px-4 mx-auto 2xl:px-0">
         <div className="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
           <div className="shrink-0 max-w-md lg:max-w-lg mx-auto space-y-6 flex flex-col justify-center items-center">
