@@ -1,10 +1,10 @@
-import PropTypes from "prop-types";
-import { toast } from "react-toastify";
-import { useForm } from "react-hook-form";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { FaCircleExclamation, FaCircleNotch } from "react-icons/fa6";
 import { Helmet } from "react-helmet-async";
 import { useEffect, useState } from "react";
-import { FaCircleExclamation, FaCircleNotch } from "react-icons/fa6";
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import PropTypes from "prop-types";
 
 import useAuth from "../../hooks/useAuth";
 import uploadImage from "../../utils/uploadImage";
@@ -13,6 +13,7 @@ import FileInput from "../../components/form/FileInput";
 import MySpinner from "../../components/shared/MySpinner";
 import CommonInput from "../../components/form/CommonInput";
 import SubmitButton from "../../components/form/SubmitButton";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Auth = ({ role }) => {
   const {
@@ -32,6 +33,7 @@ const Auth = ({ role }) => {
   } = useForm();
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosPublic = useAxiosPublic();
   const [credentialError, setCredentialError] = useState(null);
   const redirect =
     location.state?.from?.pathname + location.state?.from?.search || "/";
@@ -51,9 +53,17 @@ const Auth = ({ role }) => {
       } else {
         const res = await uploadImage(profileImage);
         if (res.data.success) {
-          await createUser(email, password);
+          const userCredentials = await createUser(email, password);
+          const userData = {
+            name,
+            email,
+            image: res.data.data.display_url,
+            role: "user",
+            uid: userCredentials.user.uid,
+          };
           toast.success("Sign up successfully.");
-          await updateProfileInfo(name, res.data.data.display_url);
+          await axiosPublic.post("users", userData);
+          await updateProfileInfo(name, userData.image);
           setLoading(false);
           navigate(redirect);
         }

@@ -28,14 +28,20 @@ const FirebaseProvider = ({ children }) => {
         if (currUser) {
           const userInfo = { uid: currUser.uid };
           const res = await axiosPublic.post("jwt", userInfo);
-          if (res.data.token) {
+          if (res.data.token)
             localStorage.setItem("access-token", res.data.token);
-          }
+          userInfo.name = currUser.displayName;
+          userInfo.email = currUser.email;
+          userInfo.image = currUser.photoURL;
+          userInfo.role = "user";
+          // const resUser =
+          await axiosPublic.post("users", userInfo);
+          // console.log(resUser.data.message);
         } else {
           localStorage.removeItem("access-token");
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
       setLoading(false);
     });

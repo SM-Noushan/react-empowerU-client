@@ -21,7 +21,7 @@ const ReviewCard = ({ review }) => {
   const handleDelete = async () => {
     const obj = {
       method: "delete",
-      url: `reviews/${_id}?uid=${user.uid}`,
+      url: `reviews/adminOrMod/${_id}?uid=${user.uid}`,
     };
     try {
       const resDB = await deleteReviewMutation(obj);

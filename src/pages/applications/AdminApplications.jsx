@@ -72,7 +72,7 @@ const AdminApplications = () => {
         <title>EmpowerU: Manage Applications</title>
       </Helmet>
       <div className="overflow-x-auto w-full">
-        <SectionHeading heading="My Applications" />
+        <SectionHeading heading="Manage Applications" />
         {isLoading ? (
           <MySpinner />
         ) : data.length === 0 ? (

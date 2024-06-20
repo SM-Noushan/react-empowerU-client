@@ -33,7 +33,7 @@ const MyApplicationTable = ({ data }) => {
     setModalData(d);
     if (d.status?.toLowerCase() === "pending" || !d.status) {
       return setOpenModal(true);
-    } else return toast.warn("Application is in process!");
+    } else return toast.warn(`Denied! Reason: ${d.status}`);
   };
 
   const handleCancel = async (id) => {
