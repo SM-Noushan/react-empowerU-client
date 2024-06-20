@@ -6,13 +6,13 @@ import {
 } from "react-icons/fa6";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Helmet } from "react-helmet-async";
 import { useEffect, useRef, useState } from "react";
 import { HiInformationCircle } from "react-icons/hi";
 import { useQueryClient } from "@tanstack/react-query";
-import { Alert, Dropdown, Modal, Table } from "flowbite-react";
+import { Alert, Dropdown, Modal, Pagination, Table } from "flowbite-react";
 
 import useAuth from "../../hooks/useAuth";
 import usePostData from "../../hooks/usePostData";
@@ -26,12 +26,16 @@ import DashboardContainer from "../../components/dashboard/shared/DashboardConta
 import ScholarshipDetailsInputFields from "../../components/dashboard/ScholarshipDetailsInputFields";
 
 const ManageScholarships = () => {
+  const limit = 5;
   const formRef = useRef();
   const { user } = useAuth();
+  const { count } = useLoaderData();
   const queryClient = useQueryClient();
+  const totalPages = Math.ceil(count / limit);
   const [editData, setEditData] = useState({});
   const [deleteId, setDeleteId] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const {
@@ -43,7 +47,11 @@ const ManageScholarships = () => {
     formState: { errors, dirtyFields },
   } = useForm();
 
-  const { data, isLoading } = useFetchData("scholarships", `scholarships`);
+  const { data, isLoading } = useFetchData(
+    "scholarships",
+    `scholarships?page=${currentPage}&limit=${limit}`,
+    { currentPage }
+  );
 
   const { mutateAsync: deleteScholarshipMutation } = usePostData();
   const { mutateAsync: editScholarshipMutation } = usePostData();
@@ -124,6 +132,8 @@ const ManageScholarships = () => {
       return toast.error("Failed! Try again");
     }
   };
+
+  const onPageChange = (page) => setCurrentPage(page);
 
   useEffect(() => {
     Object.keys(editData).forEach((key) => {
@@ -232,6 +242,15 @@ const ManageScholarships = () => {
                 ))}
               </Table.Body>
             </Table>
+            <div className="flex overflow-x-auto sm:justify-center mt-6">
+              <Pagination
+                layout={totalPages > 5 ? "table" : "navigation"}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={onPageChange}
+                showIcons
+              />
+            </div>
           </div>
         )}
       </div>

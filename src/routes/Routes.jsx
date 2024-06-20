@@ -92,6 +92,7 @@ export const router = createBrowserRouter([
             <ManageScholarships />
           </AdminOrModRoute>
         ),
+        loader: () => fetch("http://localhost:5000/count/scholarships"),
       },
       {
         path: "applications/manage",
