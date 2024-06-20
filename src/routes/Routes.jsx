@@ -32,6 +32,7 @@ export const router = createBrowserRouter([
       {
         path: "all-scholarship",
         element: <AllScholarship />,
+        loader: () => fetch("http://localhost:5000/count/scholarships"),
       },
       {
         path: "scholarship/:id",
