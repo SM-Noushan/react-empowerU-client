@@ -1,0 +1,27 @@
+[
+  {
+    "heading": "Scholarship Spotlight",
+    "description": "Discover life-changing opportunities through our curated scholarships. From STEM to arts, we've got you covered. Join us toward educational excellence!",
+    "image": "../../src/assets/banner/banner1.jpg"
+  },
+  {
+    "heading": "Empower Dreams",
+    "description": "At our platform, dreams take flight. Whether you're a budding scientist or an artist with a vision, we're here to support you.",
+    "image": "../../src/assets/banner/banner2.jpg"
+  },
+  {
+    "heading": "Invest in Education",
+    "description": "Investing in education yields lifelong dividends. Our scholarships bridge the gap between potential and achievement. Unleash your potential today!",
+    "image": "../../src/assets/banner/banner3.jpg"
+  },
+  {
+    "heading": "Path to Excellence",
+    "description": "Embark on a journey toward excellence with our scholarship offerings. From financial aid to mentorship programs, we pave the way for your success.",
+    "image": "../../src/assets/banner/banner4.jpg"
+  },
+  {
+    "heading": "Unlock Your Future",
+    "description": "Our scholarships unlock doors to knowledge, growth, and opportunity. Join a community of scholars and shape your future today!",
+    "image": "../../src/assets/banner/banner5.jpg"
+  }
+]
