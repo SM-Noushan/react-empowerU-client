@@ -93,7 +93,7 @@ const ApplicationFormModal = ({
           data: modifiedData,
         };
         const resDB = await editScholarshipMutation(object);
-        //   console.log(resDB.data);
+        // console.log(resDB.data);
         if (resDB.data?.modifiedCount) {
           setLoading(false);
           setOpenModal(false);
@@ -102,7 +102,7 @@ const ApplicationFormModal = ({
           toast.success("Successfully Updated");
         }
       } catch (error) {
-        //   console.log(error);
+        // console.log(error);
         toast.error("Failed! Try again.");
         return setLoading(false);
       }
@@ -136,7 +136,7 @@ const ApplicationFormModal = ({
             data: newData,
           };
           const resDB = await applyScholarshipMutation(object);
-          console.log(resDB.data);
+          // console.log(resDB.data);
           if (resDB.data?.insertedId) {
             setLoading(false);
             setOpenModal(false);
@@ -148,7 +148,7 @@ const ApplicationFormModal = ({
           }
         }
       } catch (error) {
-        //   console.log(error);
+        // console.log(error);
         toast.error("Failed! Try again.");
         return setLoading(false);
       }

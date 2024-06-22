@@ -45,7 +45,7 @@ const FeedBackModal = ({
     };
     try {
       const resDB = await addFeedBackMutation(obj);
-      //   console.log(resDB.data);
+      // console.log(resDB.data);
       if (resDB.data?.modifiedCount) {
         queryClient.invalidateQueries(["allApplications, myApplications"]);
         toggleModalState(false);

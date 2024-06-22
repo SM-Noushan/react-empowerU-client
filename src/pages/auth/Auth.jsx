@@ -69,7 +69,7 @@ const Auth = ({ role }) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setLoading(false);
       if (role === "signin") {
         setCredentialError(true);

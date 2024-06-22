@@ -37,7 +37,7 @@ const MyProfile = () => {
       return toast.success("Successfully updated");
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      // console.log(error);
       return toast.error("Failed! Please try again");
     }
   };
@@ -54,7 +54,7 @@ const MyProfile = () => {
         updateProfile(name, user?.photoURL);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return toast.error("Error! Please try again");
     }
   };

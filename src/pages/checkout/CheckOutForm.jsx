@@ -43,7 +43,7 @@ const CheckOutForm = ({ price, id, setOpenModal, setPayStatus }) => {
     if (error) {
       toast.error(error.message);
     } else {
-      console.log("[PaymentMethod]", paymentMethod);
+      // console.log("[PaymentMethod]", paymentMethod);
     }
     // confirm payment
     const { paymentIntent, error: payError } = await stripe.confirmCardPayment(
@@ -59,10 +59,10 @@ const CheckOutForm = ({ price, id, setOpenModal, setPayStatus }) => {
       }
     );
     if (payError) {
-      console.log("pay error", error);
+      // console.log("pay error", error);
       //   toast.error(error.message);
     } else {
-      //   console.log("[PaymentConfirm]", paymentIntent);
+      // console.log("[PaymentConfirm]", paymentIntent);
       if (paymentIntent.status === "succeeded") {
         const payment = {
           email: user?.email,

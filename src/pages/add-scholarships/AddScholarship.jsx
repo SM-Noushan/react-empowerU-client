@@ -59,7 +59,7 @@ const AddScholarship = () => {
         }
       }
     } catch (error) {
-      //   console.log(error);
+      // console.log(error);
       toast.error("Failed! Try again.");
     }
     return setLoading(false);

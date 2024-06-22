@@ -49,7 +49,7 @@ const MyApplicationTable = ({ data }) => {
         return toast.success("Application cancelled");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return toast.error("Failed! Try again");
     }
   };

@@ -33,7 +33,8 @@ export const router = createBrowserRouter([
       {
         path: "all-scholarship",
         element: <AllScholarship />,
-        loader: () => fetch("http://localhost:5000/count/scholarships"),
+        loader: () =>
+          fetch("https://empower-u-server.vercel.app/count/scholarships"),
       },
       {
         path: "scholarship/:id",
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:5000/scholarship/${params.id}`),
+          fetch(`https://empower-u-server.vercel.app/scholarship/${params.id}`),
       },
       {
         path: "scholarship/apply",
@@ -93,7 +94,8 @@ export const router = createBrowserRouter([
             <ManageScholarships />
           </AdminOrModRoute>
         ),
-        loader: () => fetch("http://localhost:5000/count/scholarships"),
+        loader: () =>
+          fetch("https://empower-u-server.vercel.app/count/scholarships"),
       },
       {
         path: "applications/manage",

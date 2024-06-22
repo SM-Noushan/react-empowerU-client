@@ -93,7 +93,7 @@ const ManageScholarships = () => {
         data: modifiedData,
       };
       const resDB = await editScholarshipMutation(object);
-      //   console.log(resDB.data);
+      // console.log(resDB.data);
       if (resDB.data?.matchedCount && !resDB.data?.modifiedCount) {
         toast.warn("No changes were made");
       }
@@ -106,7 +106,7 @@ const ManageScholarships = () => {
         toast.success("Successfully Updated");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       toast.error("Failed! Try again");
     }
     return setLoading(false);
@@ -128,7 +128,7 @@ const ManageScholarships = () => {
         return toast.success("Deleted Successfully");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return toast.error("Failed! Try again");
     }
   };

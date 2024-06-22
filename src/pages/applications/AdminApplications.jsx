@@ -48,7 +48,7 @@ const AdminApplications = () => {
     };
     try {
       const resDB = await rejectScholarshipMutation(obj);
-      //   console.log(resDB.data);
+      // console.log(resDB.data);
       if (resDB.data?.modifiedCount) {
         queryClient.invalidateQueries(["allApplications, myApplications"]);
         setRejectModal(false);

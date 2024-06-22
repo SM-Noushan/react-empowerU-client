@@ -22,7 +22,7 @@ const FirebaseProvider = ({ children }) => {
 
   React.useEffect(() => {
     const unSubscribe = onAuthStateChanged(auth, async (currUser) => {
-      console.log("curr user >> ", currUser);
+      // console.log("curr user >> ", currUser);
       setUser(currUser);
       try {
         if (currUser) {
