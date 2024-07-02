@@ -1,46 +1,66 @@
 # EmpowerU: Scholarship Management System
 
-Welcome to EmpowerU, your ultimate platform for managing scholarships effectively.
+## Project Overview
 
-- Admin Username: admin@empoweru.org
-- Admin Password: @dmin123EM
-- Live Site URL: [EmpowerU](https://ph-assignment-12-empoweru-spa.surge.sh)
+Welcome to EmpowerU, your ultimate platform for managing scholarships effectively. EmpowerU simplifies scholarship management with streamlined application and review processes and ensures secure efficient scholarship management with robust admin and moderator features.
+
+- [Live-Site](https://empoweru-by-sm-nowshan.netlify.app)
+- [Server-Repo](https://github.com/SM-Noushan/react-empowerU-server)
 
 ## Key Features:
 
-#### 1. Scholarship Management:
+- **Scholarship Management**
+- **Data security with JWT**
+- **Application Workflow**
+- **User Management**
+- **Payment System**
 
-    - Add, edit, and delete scholarships.
-    - Feature important scholarships for visibility.
+## Technologies Used in this Project
 
-#### 2. Application Workflow:
+- ReactJS
+- Firebase
+- TailwindCSS
+- MongoDB (Server Side)
+- Express.js (Server Side)
 
-    - Apply for scholarships with integrated payment options.
-    - Edit application details during processing stages.
-    - Cancel applications anytime.
+## Admin Access
 
-#### 3. Application Review:
+- **Email**: `admin@empoweru.org`
+- **Password**: `@dmin123EM`
 
-    - Review applications submitted by users.
-    - Sort applications by deadline or date of submission.
-    - Provide feedback or reject applications with status updates.
+## Run the Project Locally
 
-#### 4. User Interaction:
+### Prerequisites
 
-    - Manage and moderate user reviews for quality.
-    - Leave reviews for applied scholarships.
+Before you begin, ensure you have the following installed on your system:
 
-#### 5. User Management:
+- [Git](https://git-scm.com/downloads)
+- [Node.js](https://nodejs.org/) (LTS version recommended)
 
-    - Assign roles (admin, moderator, user) and manage permissions.
-    - Access user profiles and manage accounts.
-    - Filter users based on roles.
+1. **Clone the Repository**:
 
-#### 6. Others:
+   ```sh
+   git clone https://github.com/SM-Noushan/react-empowerU-client
+   cd react-empowerU-client
+   ```
 
-    - Ensured data security with encrypted JWT tokens and secure API endpoints.
-    - Monitor trends in scholarship applications and user engagement.
-    - Navigate through paginated scholarship and application lists.
-    - Accessible on all devices for seamless user experience.
-    - Switch themes between dark mode and light mode.
-    - Secure login with role-based access control.
+2. **Install Dependencies**:
+
+   ```sh
+   npm install
+   ```
+
+3. **Set Up Environment Variables**: Create a `.env.local` file in the root directory and add the necessary environment variables. (**Important!**)
+
+4. **Run the Application**:
+
+   ```sh
+   npm run dev -- --host
+   ```
+
+5. **Access the Site**: Open your browser and go to `http://localhost:5173/` or `http://192.168.1.12:5173/` from other devices on the same network to view the application.
+
+<br/>
+<details>
+    <summary>Thank you!</summary>
+</details>
